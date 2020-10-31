@@ -7,7 +7,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
-from design import Ui_MainWindow
+from design import Ui_mainWindow
 import gl
 
 class DBSample(Ui_mainWindow, QMainWindow):
