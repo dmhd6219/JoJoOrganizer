@@ -11,12 +11,15 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(440, 315)
-        MainWindow.setMinimumSize(QtCore.QSize(440, 315))
-        MainWindow.setStyleSheet("QWidget{\n"
+class Ui_mainWindow(object):
+    def setupUi(self, mainWindow):
+        mainWindow.setObjectName("mainWindow")
+        mainWindow.resize(440, 315)
+        mainWindow.setMinimumSize(QtCore.QSize(440, 315))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        mainWindow.setWindowIcon(icon)
+        mainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
 "}\n"
 "\n"
@@ -54,7 +57,7 @@ class Ui_MainWindow(object):
 "border-radius: 3px;\n"
 "}\n"
 "")
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -85,25 +88,25 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.settings)
         self.horizontalLayout.addLayout(self.verticalLayout)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        mainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(mainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 21))
         self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        mainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(mainWindow)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        mainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(mainWindow)
+        QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        mainWindow.setWindowTitle(_translate("mainWindow", "JoJo\'s Orginizer😎"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Event"))
+        item.setText(_translate("mainWindow", "Event"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Time"))
-        self.addEvent.setText(_translate("MainWindow", "Добавить новое событие"))
-        self.deleteEvent.setText(_translate("MainWindow", "Удалить выбранное событие"))
-        self.settings.setText(_translate("MainWindow", "Settings/Настройки"))
+        item.setText(_translate("mainWindow", "Time"))
+        self.addEvent.setText(_translate("mainWindow", "Добавить новое событие"))
+        self.deleteEvent.setText(_translate("mainWindow", "Удалить выбранное событие"))
+        self.settings.setText(_translate("mainWindow", "Settings/Настройки"))

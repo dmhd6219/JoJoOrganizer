@@ -7,10 +7,10 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
-from design import Ui_MainWindow
+from design import Ui_mainWindow
 
 
-class DBSample(Ui_MainWindow, QMainWindow):
+class DBSample(Ui_mainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -26,8 +26,8 @@ class DBSample(Ui_MainWindow, QMainWindow):
 
     def delete_event(self):
         if self.tableWidget.selectedItems():
-            print(self.tableWidget.selectedItems()[0].row())
-            self.tableWidget.removeRow(self.tableWidget.selectedItems()[0].row())
+            while self.tableWidget.selectedItems():
+                self.tableWidget.removeRow(self.tableWidget.selectedItems()[0].row())
 
 
 def exception_hook(exctype, value, traceback):
