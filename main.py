@@ -22,7 +22,7 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             cursor = db.cursor()
             autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]
             lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
-            self.translate(lang)
+            self.translate = self.translate(lang)
 
         if autoload:
             self.radioButton_3.setChecked(True)
