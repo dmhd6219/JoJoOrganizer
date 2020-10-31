@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
 from untitled import Ui_MainWindow
-
+import gl
 
 class DBSample(Ui_MainWindow, QMainWindow):
     def __init__(self):
@@ -16,6 +16,7 @@ class DBSample(Ui_MainWindow, QMainWindow):
 
         self.newEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
+        opengl = gl.OpenGLWidget(self)
 
     def add_event(self):
         self.tableWidget.setRowCount(self.tableWidget.rowCount() + 1)
@@ -24,12 +25,11 @@ class DBSample(Ui_MainWindow, QMainWindow):
 
     def delete_event(self):
         print(self.tableWidget.cursor())
+        
 
 
 def exception_hook(exctype, value, traceback):
-    print(exctype, value, traceback)
     sys.excepthook(exctype, value, traceback)
-    sys.exit(1)
 
 
 if __name__ == '__main__':
