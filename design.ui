@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>440</width>
+    <height>315</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>440</width>
+    <height>315</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget{
+	background-color:rgb(34, 34, 34);
+}
+
+QPushButton{
+	background-color: rgb(83, 83, 83);
+	border-radius: 6.5px;
+}
+
+QPushButton:hover{
+	background-color:rgb(52, 52, 52)
+}
+
+QTableWidget
+{
+background-color:rgb(255, 242, 189);
+border-radius: 3px;
+}
+
+QTableWidget QTableCornerButton::section
+{
+background-color:rgb(255, 242, 189);
+border: 1px outset red;
+}
+
+QHeaderView
+{
+background-color:  rgb(83, 83, 83);
+}
+
+QHeaderView::section
+{
+background-color:  rgb(83, 83, 83);
+color:rgb(255, 242, 189);
+border:1px outset rgb(85, 0, 0);
+border-radius: 3px;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QTableWidget" name="tableWidget">
+        <column>
+         <property name="text">
+          <string>Event</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Time</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QPushButton" name="addEvent">
+          <property name="minimumSize">
+           <size>
+            <width>191</width>
+            <height>41</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Добавить новое событие</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deleteEvent">
+          <property name="minimumSize">
+           <size>
+            <width>191</width>
+            <height>41</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Удалить выбранное событие</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="settings">
+          <property name="minimumSize">
+           <size>
+            <width>191</width>
+            <height>41</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Settings/Настройки</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>440</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
