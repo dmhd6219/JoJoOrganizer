@@ -58,7 +58,7 @@ QHeaderView::section
 {
 background-color:  rgb(83, 83, 83);
 color:rgb(255, 242, 189);
-border:1px outset rgb(85, 0, 0);
+border:1px outset rgb(181, 172, 37);
 border-radius: 3px;
 }
 </string>
@@ -110,7 +110,7 @@ border-radius: 3px;
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="settings">
+         <widget class="QPushButton" name="settingsButton">
           <property name="minimumSize">
            <size>
             <width>191</width>
