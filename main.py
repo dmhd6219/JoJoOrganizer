@@ -1,12 +1,13 @@
 import sqlite3
 import sys
 import csv
+import random
 
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
-from untitled import Ui_MainWindow
+from design import Ui_MainWindow
 
 
 class DBSample(Ui_MainWindow, QMainWindow):
@@ -14,16 +15,19 @@ class DBSample(Ui_MainWindow, QMainWindow):
         super().__init__()
         self.setupUi(self)
 
-        self.newEvent.clicked.connect(self.add_event)
+        self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
 
     def add_event(self):
         self.tableWidget.setRowCount(self.tableWidget.rowCount() + 1)
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, QTableWidgetItem('event1'))
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, QTableWidgetItem('66:66'))
+        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0,
+                                 QTableWidgetItem(f'event1{random.randint(0, 666)}'))
+        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, QTableWidgetItem(f'66:66'))
 
     def delete_event(self):
-        print(self.tableWidget.cursor())
+        if self.tableWidget.selectedItems():
+            print(self.tableWidget.selectedItems()[0].row())
+            self.tableWidget.removeRow(self.tableWidget.selectedItems()[0].row())
 
 
 def exception_hook(exctype, value, traceback):
