@@ -14,7 +14,7 @@ class TestWindow(QMainWindow):
         self.width = 800
         self.height = 600
         self.setFixedSize(self.width, self.height)
-        self.setWindowTitle("Python opengl test window")
+        self.setWindowTitle("qt opengl test window")
         self.opengl = OpenGLWidget(self)
         self.show()
         
@@ -59,7 +59,6 @@ class OpenGLWidget(QOpenGLWidget):
             self.rotationX = self.rotationX + 8 * deltaY % (360 * 16)
             self.rotationY = self.rotationY + 8 * deltaX % (360 * 16)
         elif event.buttons() & Qt.RightButton:
-            self.rotationX = self.rotationX + 8 * deltaY % (360 * 16)
             self.rotationZ = self.rotationZ + 8 * deltaX % (360 * 16)
 
         self.lastPos = event.pos()
