@@ -17,7 +17,6 @@ class DBSample(Ui_mainWindow, QMainWindow):
 
         self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
-        opengl = gl.OpenGLWidget(self)
 
     def add_event(self):
         self.tableWidget.setRowCount(self.tableWidget.rowCount() + 1)
@@ -40,4 +39,7 @@ if __name__ == '__main__':
     sys.excepthook = exception_hook
     ex = DBSample()
     ex.show()
+    
+    testwindow = gl.TestWindow()
+    
     sys.exit(app.exec())
