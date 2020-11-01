@@ -13,8 +13,8 @@ import addevent
 
 import gl
 
-
 db = sqlite3.connect('mydb.db')
+
 
 class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
     def __init__(self, parent):
@@ -113,8 +113,8 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             self.radioButton_2.setToolTip(
                 'Tick this if you want to see this program on Russian language')
 
-            self.label.setText('Autoload')
-            self.label_2.setText('Language')
+            self.label_2.setText('Autoload')
+            self.label.setText('Language')
 
         elif lang == 'rus':
             self.radioButton_3.setToolTip(
@@ -126,8 +126,8 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             self.radioButton_2.setToolTip(
                 'Отметьте это, если вы хотите, чтобы эта программа была на великом и могучем языке')
 
-            self.label.setText('Автозагрузка')
-            self.label_2.setText('Язык')
+            self.label_2.setText('Автозагрузка')
+            self.label.setText('Язык')
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         with db:
