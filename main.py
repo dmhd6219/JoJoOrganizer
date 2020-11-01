@@ -11,8 +11,10 @@ import design
 import settings
 import addevent
 
-db = sqlite3.connect('mydb.db')
+import gl
 
+
+db = sqlite3.connect('mydb.db')
 
 class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
     def __init__(self, parent):
@@ -221,4 +223,5 @@ if __name__ == '__main__':
     sys.excepthook = exception_hook
     ex = DBSample()
     ex.show()
+    gl = gl.TestWindow()
     sys.exit(app.exec())
