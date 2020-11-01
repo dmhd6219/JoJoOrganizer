@@ -14,8 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(440, 322)
-        mainWindow.setMinimumSize(QtCore.QSize(440, 315))
+        mainWindow.resize(536, 324)
+        mainWindow.setMinimumSize(QtCore.QSize(536, 324))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         mainWindow.setWindowIcon(icon)
@@ -53,7 +53,7 @@ class Ui_mainWindow(object):
 "{\n"
 "background-color:  rgb(83, 83, 83);\n"
 "color:rgb(255, 242, 189);\n"
-"border:1px outset rgb(85, 0, 0);\n"
+"border:1px outset rgb(181, 172, 37);\n"
 "border-radius: 3px;\n"
 "}\n"
 "")
@@ -65,12 +65,14 @@ class Ui_mainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(2)
+        self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
         self.horizontalLayout.addWidget(self.tableWidget)
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
@@ -90,7 +92,7 @@ class Ui_mainWindow(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout)
         mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 440, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))
         self.menubar.setObjectName("menubar")
         mainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -106,6 +108,8 @@ class Ui_mainWindow(object):
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("mainWindow", "Event"))
         item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("mainWindow", "Date"))
+        item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("mainWindow", "Time"))
         self.addEvent.setText(_translate("mainWindow", "Добавить новое событие"))
         self.deleteEvent.setText(_translate("mainWindow", "Удалить выбранное событие"))
