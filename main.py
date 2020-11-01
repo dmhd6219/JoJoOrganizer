@@ -2,19 +2,67 @@ import sqlite3
 import sys
 import random
 
+from PyQt5.QtCore import Qt
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
 import design
 import settings
+import addevent
 
 db = sqlite3.connect('mydb.db')
 
 
-class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
-    def __init__(self):
+class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
+    def __init__(self, parent):
         super().__init__()
         self.setupUi(self)
+        self.parent = parent
+        self.pushButton.clicked.connect(self.additem)
+        with db:
+            cursor = db.cursor()
+            lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            self.translate = self.translate(lang)
+
+    def additem(self):
+        self.parent.tableWidget.setRowCount(self.parent.tableWidget.rowCount() + 1)
+        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 0,
+                                        QTableWidgetItem(self.lineEdit.text()))
+        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 1,
+                                        QTableWidgetItem(self.dateEdit.text()))
+        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 2,
+                                        QTableWidgetItem(self.timeEdit.text()))
+        self.parent.update_db()
+        self.close()
+
+    def translate(self, lang):
+        if lang == 'eng':
+            self.label_2.setText('Event name')
+            self.label.setText('Date')
+            self.label_3.setText('Time')
+            self.pushButton.setText('Add event')
+
+            self.lineEdit.setToolTip('Write here ur event\'s name')
+            self.timeEdit.setToolTip('Choose date and time of ur event')
+            self.pushButton.setToolTip('Press this button to add this event')
+
+        elif lang == 'rus':
+            self.label_2.setText('Название события')
+            self.label.setText('Дата')
+            self.label_3.setText('Время')
+            self.pushButton.setText('Добавить событие')
+
+            self.lineEdit.setToolTip('Напишите здесь название вашего события')
+            self.timeEdit.setToolTip('Выберите дату и время вашего события')
+            self.pushButton.setToolTip('Нажмите эту кнопку, чтобы добавить новое событие')
+
+
+class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
+    def __init__(self, parent):
+        super().__init__()
+        self.setupUi(self)
+        self.parent = parent
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
 
@@ -79,6 +127,12 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             self.label.setText('Автозагрузка')
             self.label_2.setText('Язык')
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        with db:
+            cursor = db.cursor()
+            lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+        self.parent.translate(lang)
+
 
 class DBSample(design.Ui_mainWindow, QMainWindow):
     def __init__(self):
@@ -94,9 +148,15 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
             self.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
             self.translate(self.language)
 
+            data = cursor.execute('SELECT name, date, time FROM events').fetchall()
+            self.tableWidget.setRowCount(len(data))
+            for i, frag in enumerate(data):
+                for j, elem in enumerate(frag):
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+
     def translate(self, lang):
         if lang == 'eng':
-            self.tableWidget.setHorizontalHeaderLabels(['Event', 'Time'])
+            self.tableWidget.setHorizontalHeaderLabels(['Event', 'Data', 'Time'])
             self.tableWidget.setToolTip('Here you can see your events')
 
             self.addEvent.setText('Add event')
@@ -108,7 +168,7 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
             self.settingsButton.setToolTip('This button opens settings menu')
 
         elif lang == 'rus':
-            self.tableWidget.setHorizontalHeaderLabels(['Событие', "Время"])
+            self.tableWidget.setHorizontalHeaderLabels(['Событие', "Дата", "Время"])
             self.tableWidget.setToolTip('Тут вы можете увидеть ваши события')
 
             self.addEvent.setText('Новое событие')
@@ -120,24 +180,36 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
             self.settingsButton.setToolTip('Эта кнопка открывает меню настроек')
 
     def add_event(self):
-        self.tableWidget.setRowCount(self.tableWidget.rowCount() + 1)
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0,
-                                 QTableWidgetItem(f'event1{random.randint(0, 666)}'))
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, QTableWidgetItem(f'66:66'))
+        self.addevent = AddEventWindow(self)
+        self.addevent.show()
 
     def delete_event(self):
         if self.tableWidget.selectedItems():
             while self.tableWidget.selectedItems():
                 self.tableWidget.removeRow(self.tableWidget.selectedItems()[0].row())
+            self.update_db()
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+
+        # Удаление элементов из таблицы с помощью кнопки DEL
+        if event.key() == Qt.Key_Delete:
+            self.delete_event()
 
     def open_settings(self):
-        self.settings = SettingsWindow()
+        self.settings = SettingsWindow(self)
         self.settings.show()
+
+    def update_db(self):
+        self.tableWidget.sortByColumn(1, QtCore.Qt.AscendingOrder)
         with db:
             cursor = db.cursor()
-            self.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
-            print(self.language)
-        self.translate(self.language)
+            cursor.execute('DELETE FROM events')
+            for i in range(self.tableWidget.rowCount()):
+                items = [str(i + 1)]
+                for j in range(self.tableWidget.columnCount()):
+                    items.append(str(self.tableWidget.item(i, j).text()))
+                cursor.execute('INSERT INTO events(number, name, date, time) VALUES(?, ?, ?, ?)',
+                               tuple(items))
 
 
 def exception_hook(exctype, value, traceback):
