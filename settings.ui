@@ -73,7 +73,7 @@
         <item>
          <widget class="QRadioButton" name="radioButton">
           <property name="text">
-           <string>Eng</string>
+           <string>eng</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -86,7 +86,7 @@
         <item>
          <widget class="QRadioButton" name="radioButton_2">
           <property name="text">
-           <string>Rus</string>
+           <string>rus</string>
           </property>
           <attribute name="buttonGroup">
            <string notr="true">language_group</string>
@@ -114,7 +114,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="autoload_group"/>
   <buttongroup name="language_group"/>
+  <buttongroup name="autoload_group"/>
  </buttongroups>
 </ui>

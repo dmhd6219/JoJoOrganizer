@@ -27,6 +27,18 @@ class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
             self.lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
             self.translate = self.translate(self.lang)
 
+        self.titleI = 0
+        titleloop = QTimer(self)
+        titleloop.timeout.connect(self.updateTitle)
+        titleloop.start(50)
+
+    def updateTitle(self):
+        title = self.windowTitle()
+        self.titleI = (self.titleI + 1) % len(title)
+        title = "".join(
+            [title[i].upper() if i == self.titleI else title[i].lower() for i in range(len(title))])
+        self.setWindowTitle(title)
+
     def additem(self):
         name = self.lineEdit.text()
         if name:
@@ -59,6 +71,9 @@ class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
             self.timeEdit.setToolTip('Choose date and time of ur event')
             self.pushButton.setToolTip('Press this button to add this event')
 
+            self.setWindowTitle('Add new event')
+
+
         elif lang == 'rus':
             self.label_2.setText('Название события')
             self.label.setText('Дата')
@@ -68,6 +83,8 @@ class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
             self.lineEdit.setToolTip('Напишите здесь название вашего события')
             self.timeEdit.setToolTip('Выберите дату и время вашего события')
             self.pushButton.setToolTip('Нажмите эту кнопку, чтобы добавить новое событие')
+
+            self.setWindowTitle('Добавить новое событие')
 
 
 class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
@@ -82,7 +99,7 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             cursor = db.cursor()
             autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]
             lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
-            self.translate = self.translate(lang)
+            self.translate(lang)
 
         if autoload:
             self.radioButton_3.setChecked(True)
@@ -98,6 +115,18 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
+        self.titleI = 0
+        titleloop = QTimer(self)
+        titleloop.timeout.connect(self.updateTitle)
+        titleloop.start(50)
+
+    def updateTitle(self):
+        title = self.windowTitle()
+        self.titleI = (self.titleI + 1) % len(title)
+        title = "".join(
+            [title[i].upper() if i == self.titleI else title[i].lower() for i in range(len(title))])
+        self.setWindowTitle(title)
+
     def sql_autoload(self):
         with db:
             cursor = db.cursor()
@@ -108,13 +137,12 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
 
     def sql_language(self):
         with db:
+            lng = self.sender().text()
             cursor = db.cursor()
-            if self.sender().text() == 'Eng':
-                cursor.execute('UPDATE settings SET language = "eng"')
-                self.parent.language = 'eng'
-            elif self.sender().text() == 'Rus':
-                cursor.execute('UPDATE settings SET language = "rus"')
-                self.parent.language = 'rus'
+            cursor.execute(f'UPDATE settings SET language = "{lng}"')
+            self.parent.language = lng
+
+        self.translate(lng)
 
     def translate(self, lang):
         if lang == 'eng':
@@ -128,6 +156,8 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             self.label_2.setText('Autoload')
             self.label.setText('Language')
 
+            self.setWindowTitle('Settings')
+
         elif lang == 'rus':
             self.radioButton_3.setToolTip(
                 'Отметьте это, если вы хотите, чтобы эта программа загружалась вместе с ОС')
@@ -140,6 +170,8 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
 
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
+
+            self.setWindowTitle('Настройки')
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         with db:

@@ -81,5 +81,5 @@ class Ui_MainWindow(object):
         self.radioButton_3.setText(_translate("MainWindow", "Ya"))
         self.radioButton_4.setText(_translate("MainWindow", "No"))
         self.label.setText(_translate("MainWindow", "лангуаге"))
-        self.radioButton.setText(_translate("MainWindow", "Eng"))
-        self.radioButton_2.setText(_translate("MainWindow", "Rus"))
+        self.radioButton.setText(_translate("MainWindow", "eng"))
+        self.radioButton_2.setText(_translate("MainWindow", "rus"))
