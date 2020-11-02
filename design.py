@@ -21,11 +21,13 @@ class Ui_mainWindow(object):
         mainWindow.setWindowIcon(icon)
         mainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
+"    color:white;\n"
 "}\n"
 "\n"
 "QPushButton{\n"
 "    background-color: rgb(83, 83, 83);\n"
 "    border-radius: 6.5px;\n"
+"    color:black;\n"
 "}\n"
 "\n"
 "QPushButton:hover{\n"
@@ -36,6 +38,7 @@ class Ui_mainWindow(object):
 "{\n"
 "background-color:rgb(255, 242, 189);\n"
 "border-radius: 3px;\n"
+"color:black;\n"
 "}\n"
 "\n"
 "QTableWidget QTableCornerButton::section\n"
@@ -56,6 +59,7 @@ class Ui_mainWindow(object):
 "border:1px outset rgb(181, 172, 37);\n"
 "border-radius: 3px;\n"
 "}\n"
+"\n"
 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")

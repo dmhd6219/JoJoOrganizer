@@ -2,9 +2,9 @@ import sqlite3
 import sys
 import random
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem
 
 import design
@@ -24,19 +24,29 @@ class AddEventWindow(addevent.Ui_MainWindow, QMainWindow):
         self.pushButton.clicked.connect(self.additem)
         with db:
             cursor = db.cursor()
-            lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
-            self.translate = self.translate(lang)
+            self.lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            self.translate = self.translate(self.lang)
 
     def additem(self):
-        self.parent.tableWidget.setRowCount(self.parent.tableWidget.rowCount() + 1)
-        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 0,
-                                        QTableWidgetItem(self.lineEdit.text()))
-        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 1,
-                                        QTableWidgetItem(self.dateEdit.text()))
-        self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 2,
-                                        QTableWidgetItem(self.timeEdit.text()))
-        self.parent.update_db()
-        self.close()
+        name = self.lineEdit.text()
+        if name:
+            self.parent.tableWidget.setRowCount(self.parent.tableWidget.rowCount() + 1)
+            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 0,
+                                            QTableWidgetItem(name))
+            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 1,
+                                            QTableWidgetItem(self.dateEdit.text()))
+            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 2,
+                                            QTableWidgetItem(self.timeEdit.text()))
+            self.parent.update_db()
+            self.close()
+        else:
+            if self.lang == 'eng':
+                self.message = QMessageBox.warning(self, 'Warning', 'Please input name of ur event',
+                                                   QMessageBox.Cancel)
+            elif self.lang == 'rus':
+                self.message = QMessageBox.warning(self, 'Предупреждение',
+                                                   'Пожалуйста, введите название для вашего события',
+                                                   QMessageBox.Cancel)
 
     def translate(self, lang):
         if lang == 'eng':
@@ -101,8 +111,10 @@ class SettingsWindow(settings.Ui_MainWindow, QMainWindow):
             cursor = db.cursor()
             if self.sender().text() == 'Eng':
                 cursor.execute('UPDATE settings SET language = "eng"')
+                self.parent.language = 'eng'
             elif self.sender().text() == 'Rus':
                 cursor.execute('UPDATE settings SET language = "rus"')
+                self.parent.language = 'rus'
 
     def translate(self, lang):
         if lang == 'eng':
@@ -156,6 +168,18 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
                 for j, elem in enumerate(frag):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
+        self.titleI = 0
+        titleloop = QTimer(self)
+        titleloop.timeout.connect(self.updateTitle)
+        titleloop.start(50)
+
+    def updateTitle(self):
+        title = self.windowTitle()
+        self.titleI = (self.titleI + 1) % len(title)
+        title = "".join(
+            [title[i].upper() if i == self.titleI else title[i].lower() for i in range(len(title))])
+        self.setWindowTitle(title)
+
     def translate(self, lang):
         if lang == 'eng':
             self.tableWidget.setHorizontalHeaderLabels(['Event', 'Data', 'Time'])
@@ -190,6 +214,15 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
             while self.tableWidget.selectedItems():
                 self.tableWidget.removeRow(self.tableWidget.selectedItems()[0].row())
             self.update_db()
+        else:
+            if self.language == 'eng':
+                self.message = QMessageBox.warning(self, 'Warning',
+                                                   'Please choose events to delete',
+                                                   QMessageBox.Cancel)
+            elif self.language == 'rus':
+                self.message = QMessageBox.warning(self, 'Предупреждение',
+                                                   'Пожалуйста, выберите события для удаления',
+                                                   QMessageBox.Cancel)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
 
@@ -202,20 +235,31 @@ class DBSample(design.Ui_mainWindow, QMainWindow):
         self.settings.show()
 
     def update_db(self):
-        self.tableWidget.sortByColumn(1, QtCore.Qt.AscendingOrder)
+        # создаем список из ивентов, чтобы его нормально отсортировать, заливаем его в tablewidget
+        events = []
+        for i in range(self.tableWidget.rowCount()):
+            items = [str(i + 1)]
+            for j in range(self.tableWidget.columnCount()):
+                items.append(str(self.tableWidget.item(i, j).text()))
+            events.append(items)
+        events.sort(key=sort_by_datetime)
+        # заливаем отсортированный список в бд
         with db:
             cursor = db.cursor()
             cursor.execute('DELETE FROM events')
-            for i in range(self.tableWidget.rowCount()):
-                items = [str(i + 1)]
-                for j in range(self.tableWidget.columnCount()):
-                    items.append(str(self.tableWidget.item(i, j).text()))
+            for i, column in enumerate(events):
                 cursor.execute('INSERT INTO events(number, name, date, time) VALUES(?, ?, ?, ?)',
-                               tuple(items))
+                               tuple(column))
+                for j, elem in enumerate(column[1::]):
+                    self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
 
 def exception_hook(exctype, value, traceback):
     sys.excepthook(exctype, value, traceback)
+
+
+def sort_by_datetime(smth):
+    return smth[2], smth[3], smth[1][0]
 
 
 if __name__ == '__main__':
