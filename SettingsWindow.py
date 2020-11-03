@@ -1,9 +1,35 @@
+import os
+
 from PyQt5 import QtGui
 
 import settings
 from connects import db
 
 from Window import BaseWindow
+
+import getpass
+
+
+def add_to_startup(file_path=""):
+    if file_path == "":
+        file_path = os.path.dirname(os.path.realpath(__file__))
+    bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % getpass.getuser()
+    with open(bat_path + '\\' + "open.bat", "w+") as bat_file:
+        bat_file.write(r'start "" %s' % file_path)
+
+
+def delete_from_startup(file_path=""):
+    if file_path == "":
+        file_path = os.path.dirname(os.path.realpath(__file__))
+    bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % getpass.getuser()
+    with open(bat_path + '\\' + "open.bat", "w") as bat_file, open(bat_path + '\\' + "open.bat", "r") as read_bat_file:
+        a = read_bat_file.readlines()
+        for i, smth in enumerate(a):
+            if r'start "" %s' % file_path in smth:
+                del a[i]
+                return
+        bat_file.write(''.join(a))
+
 
 class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     def __init__(self, parent):
@@ -33,14 +59,16 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
-
     def sql_autoload(self):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
                 cursor.execute('UPDATE settings SET autoload = 1')
+                add_to_startup()
+
             elif self.sender().text() == 'No':
                 cursor.execute('UPDATE settings SET autoload = 0')
+                delete_from_startup()
 
     def sql_language(self):
         with db:

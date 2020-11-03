@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import QTableWidgetItem
 import design
 from connects import db
 
-import gl
 from AddEventWindow import AddEventWindow
 from SettingsWindow import SettingsWindow
 from Window import BaseWindow

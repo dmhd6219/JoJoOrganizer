@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import QMainWindow
 class BaseWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
 
         self.titleI = 0
         titleloop = QTimer(self)

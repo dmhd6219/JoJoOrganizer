@@ -1,14 +1,12 @@
-import random
-import time
-
-from PyQt5.QtWidgets import QOpenGLWidget, QMainWindow
+from PyQt5.QtWidgets import QOpenGLWidget
 from PyQt5.QtCore import Qt, QTimer
 from OpenGL.GL import *
-import glu as glutils
+
+from Window import BaseWindow
 
 
-class TestWindow(QMainWindow):
-    
+class TestWindow(BaseWindow):
+
     def __init__(self):
         super().__init__()
         self.width = 800
@@ -17,17 +15,6 @@ class TestWindow(QMainWindow):
         self.setWindowTitle("qt opengl test window")
         self.opengl = OpenGLWidget(self)
         self.show()
-        
-        self.titleI = 0
-        titleloop = QTimer(self)
-        titleloop.timeout.connect(self.updateTitle)
-        titleloop.start(50)
-     
-    def updateTitle(self):
-        title = self.windowTitle()
-        self.titleI = (self.titleI + 1) % len(title)
-        title = "".join([title[i].upper() if i == self.titleI else title[i].lower() for i in range(len(title))])
-        self.setWindowTitle(title)
 
 
 class OpenGLWidget(QOpenGLWidget):
@@ -36,18 +23,18 @@ class OpenGLWidget(QOpenGLWidget):
         super(OpenGLWidget, self).__init__(parent)
         self.resize(800, 600)
         self.move(0, 0)
-        
+
         renderLoop = QTimer(self)
         renderLoop.timeout.connect(self.onUpdate)
         renderLoop.start(20)
-    
+
         self.rotationX = 0
         self.rotationY = 0
         self.rotationZ = 0
         self.posX = 0
         self.posY = 0
         self.posZ = 0
-        
+
     def mousePressEvent(self, event):
         self.lastPos = event.pos()
 
@@ -62,10 +49,10 @@ class OpenGLWidget(QOpenGLWidget):
             self.rotationZ = self.rotationZ + 8 * deltaX % (360 * 16)
 
         self.lastPos = event.pos()
-    
+
     def wheelEvent(self, event):
         self.posZ += event.angleDelta().y() / 32
-        
+
     def initializeGL(self):
         # lightPos = (5.0, 5.0, 10.0, 1.0)
         # glLightfv(GL_LIGHT0, GL_POSITION, lightPos)
@@ -73,7 +60,7 @@ class OpenGLWidget(QOpenGLWidget):
         # glEnable(GL_LIGHT0)
         glClearColor(1, 1, 1, 1)
         glEnable(GL_DEPTH_TEST)
-    
+
     def resizeGL(self, width, height):
         side = min(width, height)
         if side < 0:
@@ -87,7 +74,7 @@ class OpenGLWidget(QOpenGLWidget):
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glTranslated(0.0, 0.0, -7.0)
-    
+
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
@@ -98,21 +85,20 @@ class OpenGLWidget(QOpenGLWidget):
         glTranslated(self.posX, self.posY, self.posZ)
         self.draw()
         glPopMatrix()
-    
+
     def onUpdate(self):
         self.update()
-    
-    def draw(self):        
+
+    def draw(self):
         glEnableClientState(GL_VERTEX_ARRAY)
         glEnableClientState(GL_COLOR_ARRAY)
-        
+
         pointData = [[0, 1, 0], [-1, -1, 0], [1, -1, 0]]
         pointColor = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
         glVertexPointer(3, GL_FLOAT, 0, pointData)
         glColorPointer(3, GL_FLOAT, 0, pointColor)
         glDrawArrays(GL_TRIANGLES, 0, 3)
-        
+
         glDisableClientState(GL_VERTEX_ARRAY)
         glDisableClientState(GL_COLOR_ARRAY)
-        
