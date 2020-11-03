@@ -16,7 +16,7 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
         with db:
             cursor = db.cursor()
             self.lang = cursor.execute('''
-                `                       SELECT 
+                                       SELECT 
                                             language 
                                         FROM 
                                             settings''').fetchone()[0]
