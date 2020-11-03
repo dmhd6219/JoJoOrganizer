@@ -3,7 +3,10 @@ import time
 
 from PyQt5.QtWidgets import QOpenGLWidget, QMainWindow
 from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QSurfaceFormat
+
 from OpenGL.GL import *
+from OpenGL.GLU import *
 import glu as glutils
 
 
@@ -36,6 +39,10 @@ class OpenGLWidget(QOpenGLWidget):
         super(OpenGLWidget, self).__init__(parent)
         self.resize(800, 600)
         self.move(0, 0)
+        
+        format = QSurfaceFormat();  
+        format.setSamples(8);
+        self.setFormat(format);
         
         renderLoop = QTimer(self)
         renderLoop.timeout.connect(self.onUpdate)
@@ -71,9 +78,12 @@ class OpenGLWidget(QOpenGLWidget):
         # glLightfv(GL_LIGHT0, GL_POSITION, lightPos)
         # glEnable(GL_LIGHTING)
         # glEnable(GL_LIGHT0)
-        glClearColor(1, 1, 1, 1)
+        glClearColor(0.13, 0.13, 0.13, 1)
         glEnable(GL_DEPTH_TEST)
-    
+        glEnable(GL_TEXTURE_2D)
+        
+        self.texture = glutils.createTexture("neskvik.png")
+
     def resizeGL(self, width, height):
         side = min(width, height)
         if side < 0:
@@ -86,16 +96,17 @@ class OpenGLWidget(QOpenGLWidget):
         glFrustum(-1.0, +1.0, -1.0, 1.0, 5.0, 60.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glTranslated(0.0, 0.0, -7.0)
+        glTranslated(0.0, 0.0, -6.0)
     
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
 
+        glTranslated(self.posX, self.posY, self.posZ)
         glRotated(self.rotationX / 16, 1.0, 0.0, 0.0)
         glRotated(self.rotationY / 16, 0.0, 1.0, 0.0)
         glRotated(self.rotationZ / 16, 0.0, 0.0, 1.0)
-        glTranslated(self.posX, self.posY, self.posZ)
+        
         self.draw()
         glPopMatrix()
     
@@ -103,16 +114,16 @@ class OpenGLWidget(QOpenGLWidget):
         self.update()
     
     def draw(self):        
-        glEnableClientState(GL_VERTEX_ARRAY)
-        glEnableClientState(GL_COLOR_ARRAY)
-        
-        pointData = [[0, 1, 0], [-1, -1, 0], [1, -1, 0]]
-        pointColor = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
 
-        glVertexPointer(3, GL_FLOAT, 0, pointData)
-        glColorPointer(3, GL_FLOAT, 0, pointColor)
-        glDrawArrays(GL_TRIANGLES, 0, 3)
+#         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+#         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  
+#         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, self.texture)
         
-        glDisableClientState(GL_VERTEX_ARRAY)
-        glDisableClientState(GL_COLOR_ARRAY)
+        glBegin(GL_QUADS)
+        glutils.drawCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5)    
         
+       
+        glEnd();  
+

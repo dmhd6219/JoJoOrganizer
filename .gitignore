@@ -5,3 +5,7 @@ venv
 .project
 .pydevproject
 .settings
+
+build
+dist
+main.spec
