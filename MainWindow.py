@@ -1,3 +1,7 @@
+import sqlite3
+import time
+import datetime as dt
+
 from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMessageBox
@@ -10,11 +14,15 @@ from AddEventWindow import AddEventWindow
 from SettingsWindow import SettingsWindow
 from Window import BaseWindow
 
+from threading import Thread
 
+
+# функция для сортировки событий по дате и времени
 def sort_by_datetime(smth):
     return smth[2], smth[3], smth[1][0]
 
 
+# класс главного окна
 class MyMainWindow(design.Ui_mainWindow, BaseWindow):
     def __init__(self):
         super().__init__()
@@ -24,17 +32,52 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         self.deleteEvent.clicked.connect(self.delete_event)
         self.settingsButton.clicked.connect(self.open_settings)
 
+        # загрузка данных из бд при запуске программы
         with db:
             cursor = db.cursor()
+            # получение языка программы из бд и ее перевод
             self.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
             self.translate(self.language)
 
+            # получение данных о будильниках и добавление их в TableWidget
             data = cursor.execute('SELECT name, date, time FROM events').fetchall()
             self.tableWidget.setRowCount(len(data))
             for i, frag in enumerate(data):
                 for j, elem in enumerate(frag):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
+        # создание потока на проверку времени для будильников
+        self.thread = Thread(target=self.check_time)
+        self.thread.start()
+        self.stop_thread = False
+
+    # функция для потока на проверку времени для будильников
+    def check_time(self):
+        db = sqlite3.connect('mydb.db')
+        while not self.stop_thread:
+            cursor = db.cursor()
+            for event in cursor.execute('SELECT * FROM events').fetchall():
+                # преобразование полученной из бд даты к формату библиотеки datetime для сравнения
+                event_date_list = str(event[-2]).split('.')
+                event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
+                                     int(event_date_list[0]))
+
+                event_time = event[-1]
+                # срабатывание будильника если время подходит
+                if event_date == dt.date.today():
+                    current_time = dt.datetime.now().time()
+                    if str(
+                            event_time) == f'{current_time.hour}:{current_time.minute}':
+                        self.alarm(event[0])
+                        time.sleep(60)
+            time.sleep(1)
+        return
+
+    # срабатывание будильника
+    def alarm(self, name):
+        pass
+
+    # перевод главного окна
     def translate(self, lang):
         if lang == 'eng':
             self.tableWidget.setHorizontalHeaderLabels(['Event', 'Data', 'Time'])
@@ -60,10 +103,12 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
 
             self.settingsButton.setToolTip('Эта кнопка открывает меню настроек')
 
+    # открытие окна с добавлением нового события
     def add_event(self):
         self.addevent = AddEventWindow(self)
         self.addevent.show()
 
+    # открытие окна с удалением выбранного события
     def delete_event(self):
         if self.tableWidget.selectedItems():
             while self.tableWidget.selectedItems():
@@ -107,3 +152,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
                                tuple(column))
                 for j, elem in enumerate(column[1::]):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
+
+    # close event и закрытие thread на срабатывание таймера
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.stop_thread = True

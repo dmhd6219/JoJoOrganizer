@@ -35,6 +35,9 @@
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_3">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Ya</string>
           </property>
@@ -48,6 +51,9 @@
         </item>
         <item>
          <widget class="QRadioButton" name="radioButton_4">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>No</string>
           </property>
@@ -114,7 +120,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="language_group"/>
   <buttongroup name="autoload_group"/>
+  <buttongroup name="language_group"/>
  </buttongroups>
 </ui>
