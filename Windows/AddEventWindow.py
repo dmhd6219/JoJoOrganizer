@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
-import addevent
+from uis import addevent
 from connects import db
 
-from Window import BaseWindow
+from Windows.Window import BaseWindow
 
 
 # класс для окна с добавлением нового события
@@ -16,7 +16,7 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
         with db:
             cursor = db.cursor()
             self.lang = cursor.execute('''
-                `                       SELECT 
+                                       SELECT 
                                             language 
                                         FROM 
                                             settings''').fetchone()[0]
