@@ -7,7 +7,7 @@ from PyQt5.QtGui import QSurfaceFormat
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import glu as glutils
+import opengl.glu as glutils
 
 
 class TestWindow(QMainWindow):
@@ -112,6 +112,7 @@ class OpenGLWidget(QOpenGLWidget):
     
     def onUpdate(self):
         self.update()
+        self.rotationY += 64
     
     def draw(self):        
 
