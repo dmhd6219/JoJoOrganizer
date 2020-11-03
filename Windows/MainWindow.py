@@ -7,12 +7,12 @@ from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTableWidgetItem
 
-import design
+from uis import design
 from connects import db
 
-from AddEventWindow import AddEventWindow
-from SettingsWindow import SettingsWindow
-from Window import BaseWindow
+from Windows.AddEventWindow import AddEventWindow
+from Windows.SettingsWindow import SettingsWindow
+from Windows.Window import BaseWindow
 
 from threading import Thread
 
@@ -102,7 +102,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
 
     # функция для потока на проверку времени для будильников
     def check_time(self):
-        db = sqlite3.connect('mydb.db')
+        db = sqlite3.connect('files/mydb.db')
         while not self.stop_thread:
             cursor = db.cursor()
             for event in cursor.execute('''

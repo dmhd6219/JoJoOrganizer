@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
-import addevent
+from uis import addevent
 from connects import db
 
-from Window import BaseWindow
+from Windows.Window import BaseWindow
 
 
 # класс для окна с добавлением нового события

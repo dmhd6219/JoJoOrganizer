@@ -1,9 +1,9 @@
 from PyQt5 import QtGui
 
-import settings
+from uis import settings
 from connects import db
 
-from Window import BaseWindow
+from Windows.Window import BaseWindow
 
 
 # класс для окна настроек
