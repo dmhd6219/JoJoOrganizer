@@ -35,12 +35,61 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         # загрузка данных из бд при запуске программы
         with db:
             cursor = db.cursor()
+
+            # создание с таблицами с ивентами, если таковой не существует
+            cursor.execute('''
+                            CREATE 
+                                table 
+                            IF 
+                                not exists 
+                            events (
+                                number integer PRIMARY KEY, 
+                                name text, 
+                                date date, 
+                                time time
+                                                                  )
+                            ''')
+            # создание с таблицами с настройками, если таковой не существует
+            cursor.execute('''
+                            CREATE 
+                                table 
+                            IF 
+                                not exists 
+                            settings (
+                                id integer PRIMARY KEY DEFAULT(1), 
+                                autoload integer DEFAULT(0), 
+                                language text DEFAULT "eng"
+                                                                    )
+                            ''')
+            # вставка дефолтных данных в таблицу с настройками, если та не заполнена
+            try:
+                cursor.execute('''
+                                INSERT INTO 
+                                    settings 
+                                VALUES (
+                                        1, 
+                                        0, 
+                                        "eng"
+                                                )
+                                ''')
+            except sqlite3.IntegrityError:
+                pass
+
             # получение языка программы из бд и ее перевод
-            self.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            self.language = cursor.execute('''
+                                            SELECT 
+                                                language 
+                                            FROM 
+                                                settings
+                                            ''').fetchone()[0]
             self.translate(self.language)
 
             # получение данных о будильниках и добавление их в TableWidget
-            data = cursor.execute('SELECT name, date, time FROM events').fetchall()
+            data = cursor.execute('''
+                                    SELECT 
+                                        name, date, time 
+                                    FROM 
+                                        events''').fetchall()
             self.tableWidget.setRowCount(len(data))
             for i, frag in enumerate(data):
                 for j, elem in enumerate(frag):
@@ -56,7 +105,12 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         db = sqlite3.connect('mydb.db')
         while not self.stop_thread:
             cursor = db.cursor()
-            for event in cursor.execute('SELECT * FROM events').fetchall():
+            for event in cursor.execute('''
+                                        SELECT
+                                            * 
+                                        FROM 
+                                            events
+                                        ''').fetchall():
                 # преобразование полученной из бд даты к формату библиотеки datetime для сравнения
                 event_date_list = str(event[-2]).split('.')
                 event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
@@ -146,10 +200,26 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         # заливаем отсортированный список в бд
         with db:
             cursor = db.cursor()
-            cursor.execute('DELETE FROM events')
+            cursor.execute('''
+                            DELETE 
+                            FROM 
+                                events''')
             for i, column in enumerate(events):
-                cursor.execute('INSERT INTO events(number, name, date, time) VALUES(?, ?, ?, ?)',
-                               tuple(column))
+                cursor.execute('''
+                                INSERT INTO 
+                                    events (
+                                            number, 
+                                            name, 
+                                            date, 
+                                            time
+                                                    ) 
+                                    VALUES (
+                                            ?, 
+                                            ?, 
+                                            ?, 
+                                            ?
+                                                )
+                                                    ''', tuple(column))
                 for j, elem in enumerate(column[1::]):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 

@@ -5,6 +5,7 @@ from connects import db
 
 from Window import BaseWindow
 
+
 # класс для окна с добавлением нового события
 class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
     def __init__(self, parent):
@@ -14,7 +15,11 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
         self.pushButton.clicked.connect(self.additem)
         with db:
             cursor = db.cursor()
-            self.lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            self.lang = cursor.execute('''
+                `                       SELECT 
+                                            language 
+                                        FROM 
+                                            settings''').fetchone()[0]
             self.translate = self.translate(self.lang)
 
     # добавление нового значения в таблицу и обновление базы данных
@@ -38,6 +43,7 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
                 self.message = QMessageBox.warning(self, 'Предупреждение',
                                                    'Пожалуйста, введите название для вашего события',
                                                    QMessageBox.Cancel)
+
     # перевод окна с добавлением нового события
     def translate(self, lang):
         if lang == 'eng':

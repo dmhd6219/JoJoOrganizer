@@ -18,8 +18,15 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         # загрузка данных из бд при открытии окна настроек
         with db:
             cursor = db.cursor()
-            autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]
-            lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            autoload = cursor.execute('''
+                                        SELECT 
+                                            autoload 
+                                        FROM 
+                                            settings''').fetchone()[0]
+            lang = cursor.execute('''SELECT 
+                                        language 
+                                    FROM 
+                                        settings''').fetchone()[0]
             self.translate(lang)
 
         # изменение radiobuttons в зависимости от значений из бд
@@ -41,17 +48,28 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     # with db:
     # cursor = db.cursor()
     # if self.sender().text() == 'Ya':
-    # cursor.execute('UPDATE settings SET autoload = 1')
+    # cursor.execute('''UPDATE
+    #                       settings
+    #                   SET
+    #                       autoload = 1''')
 
     # elif self.sender().text() == 'No':
-    # cursor.execute('UPDATE settings SET autoload = 0')
+    # cursor.execute('''
+    #                   UPDATE
+    #                       settings
+    #                   SET
+    #                       autoload = 0''')
 
     # обновление языка программы в базе данных
     def sql_language(self):
         with db:
             lng = self.sender().text()
             cursor = db.cursor()
-            cursor.execute(f'UPDATE settings SET language = "{lng}"')
+            cursor.execute(f'''
+                            UPDATE 
+                                settings 
+                            SET 
+                                language = "{lng}"''')
             self.parent.language = lng
 
         self.translate(lng)
@@ -91,5 +109,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         with db:
             cursor = db.cursor()
-            lang = cursor.execute('SELECT language FROM settings').fetchone()[0]
+            lang = cursor.execute('''
+                                    SELECT 
+                                        language 
+                                    FROM 
+                                        settings''').fetchone()[0]
         self.parent.translate(lang)
