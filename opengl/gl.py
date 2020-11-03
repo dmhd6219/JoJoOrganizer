@@ -1,8 +1,15 @@
 from PyQt5.QtWidgets import QOpenGLWidget
 from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QSurfaceFormat
+
 from OpenGL.GL import *
+<<<<<<< HEAD
+from OpenGL.GLU import *
+import glu as glutils
+=======
 
 from Window import BaseWindow
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
 
 class TestWindow(BaseWindow):
@@ -23,7 +30,15 @@ class OpenGLWidget(QOpenGLWidget):
         super(OpenGLWidget, self).__init__(parent)
         self.resize(800, 600)
         self.move(0, 0)
+<<<<<<< HEAD
+        
+        format = QSurfaceFormat();  
+        format.setSamples(8);
+        self.setFormat(format);
+        
+=======
 
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
         renderLoop = QTimer(self)
         renderLoop.timeout.connect(self.onUpdate)
         renderLoop.start(20)
@@ -58,8 +73,14 @@ class OpenGLWidget(QOpenGLWidget):
         # glLightfv(GL_LIGHT0, GL_POSITION, lightPos)
         # glEnable(GL_LIGHTING)
         # glEnable(GL_LIGHT0)
-        glClearColor(1, 1, 1, 1)
+        glClearColor(0.13, 0.13, 0.13, 1)
         glEnable(GL_DEPTH_TEST)
+<<<<<<< HEAD
+        glEnable(GL_TEXTURE_2D)
+        
+        self.texture = glutils.createTexture("neskvik.png")
+=======
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
     def resizeGL(self, width, height):
         side = min(width, height)
@@ -73,21 +94,31 @@ class OpenGLWidget(QOpenGLWidget):
         glFrustum(-1.0, +1.0, -1.0, 1.0, 5.0, 60.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
+<<<<<<< HEAD
+        glTranslated(0.0, 0.0, -6.0)
+    
+=======
         glTranslated(0.0, 0.0, -7.0)
 
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
 
+        glTranslated(self.posX, self.posY, self.posZ)
         glRotated(self.rotationX / 16, 1.0, 0.0, 0.0)
         glRotated(self.rotationY / 16, 0.0, 1.0, 0.0)
         glRotated(self.rotationZ / 16, 0.0, 0.0, 1.0)
-        glTranslated(self.posX, self.posY, self.posZ)
+        
         self.draw()
         glPopMatrix()
 
     def onUpdate(self):
         self.update()
+<<<<<<< HEAD
+    
+    def draw(self):        
+=======
 
     def draw(self):
         glEnableClientState(GL_VERTEX_ARRAY)
@@ -95,10 +126,26 @@ class OpenGLWidget(QOpenGLWidget):
 
         pointData = [[0, 1, 0], [-1, -1, 0], [1, -1, 0]]
         pointColor = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
+<<<<<<< HEAD
+#         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+#         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  
+#         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, self.texture)
+        
+        glBegin(GL_QUADS)
+        glutils.drawCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5)    
+        
+       
+        glEnd();  
+
+=======
         glVertexPointer(3, GL_FLOAT, 0, pointData)
         glColorPointer(3, GL_FLOAT, 0, pointColor)
         glDrawArrays(GL_TRIANGLES, 0, 3)
 
         glDisableClientState(GL_VERTEX_ARRAY)
         glDisableClientState(GL_COLOR_ARRAY)
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
