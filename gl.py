@@ -1,19 +1,17 @@
-from PyQt5.QtWidgets import QOpenGLWidget
+import random
+import time
+
+from PyQt5.QtWidgets import QOpenGLWidget, QMainWindow
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QSurfaceFormat
 
 from OpenGL.GL import *
-<<<<<<< HEAD
 from OpenGL.GLU import *
 import glu as glutils
-=======
-
-from Window import BaseWindow
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
 
-class TestWindow(BaseWindow):
-
+class TestWindow(QMainWindow):
+    
     def __init__(self):
         super().__init__()
         self.width = 800
@@ -22,6 +20,17 @@ class TestWindow(BaseWindow):
         self.setWindowTitle("qt opengl test window")
         self.opengl = OpenGLWidget(self)
         self.show()
+        
+        self.titleI = 0
+        titleloop = QTimer(self)
+        titleloop.timeout.connect(self.updateTitle)
+        titleloop.start(50)
+     
+    def updateTitle(self):
+        title = self.windowTitle()
+        self.titleI = (self.titleI + 1) % len(title)
+        title = "".join([title[i].upper() if i == self.titleI else title[i].lower() for i in range(len(title))])
+        self.setWindowTitle(title)
 
 
 class OpenGLWidget(QOpenGLWidget):
@@ -30,26 +39,22 @@ class OpenGLWidget(QOpenGLWidget):
         super(OpenGLWidget, self).__init__(parent)
         self.resize(800, 600)
         self.move(0, 0)
-<<<<<<< HEAD
         
         format = QSurfaceFormat();  
         format.setSamples(8);
         self.setFormat(format);
         
-=======
-
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
         renderLoop = QTimer(self)
         renderLoop.timeout.connect(self.onUpdate)
         renderLoop.start(20)
-
+    
         self.rotationX = 0
         self.rotationY = 0
         self.rotationZ = 0
         self.posX = 0
         self.posY = 0
         self.posZ = 0
-
+        
     def mousePressEvent(self, event):
         self.lastPos = event.pos()
 
@@ -64,10 +69,10 @@ class OpenGLWidget(QOpenGLWidget):
             self.rotationZ = self.rotationZ + 8 * deltaX % (360 * 16)
 
         self.lastPos = event.pos()
-
+    
     def wheelEvent(self, event):
         self.posZ += event.angleDelta().y() / 32
-
+        
     def initializeGL(self):
         # lightPos = (5.0, 5.0, 10.0, 1.0)
         # glLightfv(GL_LIGHT0, GL_POSITION, lightPos)
@@ -75,12 +80,9 @@ class OpenGLWidget(QOpenGLWidget):
         # glEnable(GL_LIGHT0)
         glClearColor(0.13, 0.13, 0.13, 1)
         glEnable(GL_DEPTH_TEST)
-<<<<<<< HEAD
         glEnable(GL_TEXTURE_2D)
         
         self.texture = glutils.createTexture("neskvik.png")
-=======
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
     def resizeGL(self, width, height):
         side = min(width, height)
@@ -94,13 +96,8 @@ class OpenGLWidget(QOpenGLWidget):
         glFrustum(-1.0, +1.0, -1.0, 1.0, 5.0, 60.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-<<<<<<< HEAD
         glTranslated(0.0, 0.0, -6.0)
     
-=======
-        glTranslated(0.0, 0.0, -7.0)
-
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
@@ -112,23 +109,12 @@ class OpenGLWidget(QOpenGLWidget):
         
         self.draw()
         glPopMatrix()
-
+    
     def onUpdate(self):
         self.update()
-<<<<<<< HEAD
     
     def draw(self):        
-=======
 
-    def draw(self):
-        glEnableClientState(GL_VERTEX_ARRAY)
-        glEnableClientState(GL_COLOR_ARRAY)
-
-        pointData = [[0, 1, 0], [-1, -1, 0], [1, -1, 0]]
-        pointColor = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
-
-<<<<<<< HEAD
 #         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 #         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  
 #         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -137,15 +123,6 @@ class OpenGLWidget(QOpenGLWidget):
         
         glBegin(GL_QUADS)
         glutils.drawCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5)    
-        
        
         glEnd();  
 
-=======
-        glVertexPointer(3, GL_FLOAT, 0, pointData)
-        glColorPointer(3, GL_FLOAT, 0, pointColor)
-        glDrawArrays(GL_TRIANGLES, 0, 3)
-
-        glDisableClientState(GL_VERTEX_ARRAY)
-        glDisableClientState(GL_COLOR_ARRAY)
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
