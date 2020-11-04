@@ -24,14 +24,13 @@ def sort_by_datetime(smth):
 
 # класс главного окна
 class MyMainWindow(design.Ui_mainWindow, BaseWindow):
-    def __init__(self, filename):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.filename = filename
 
         self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
-        self.settingsButton.clicked.connect(lambda : self.open_settings(self.filename))
+        self.settingsButton.clicked.connect(self.open_settings)
 
         # загрузка данных из бд при запуске программы
         with db:
@@ -185,8 +184,8 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         if event.key() == Qt.Key_Delete:
             self.delete_event()
 
-    def open_settings(self, filename):
-        self.settings = SettingsWindow(self, filename)
+    def open_settings(self):
+        self.settings = SettingsWindow(self)
         self.settings.show()
 
     def update_db(self):

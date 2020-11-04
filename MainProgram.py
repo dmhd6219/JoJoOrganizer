@@ -8,7 +8,7 @@ from opengl.gl import TestWindow
 
 # основной запуск программы:)
 app = QApplication(sys.argv)
-ex = MyMainWindow(__file__)
+ex = MyMainWindow()
 ex.show()
 t = TestWindow()
 sys.exit(app.exec())

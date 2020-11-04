@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 from uis import addevent
 from UsefulShit import db
-
+import datetime
 from Windows.Window import BaseWindow
 
 
@@ -13,13 +13,18 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
         self.setupUi(self)
         self.parent = parent
         self.pushButton.clicked.connect(self.additem)
+
+        self.dateEdit.setMinimumDate(datetime.date.today())
+        self.timeEdit.setMinimumTime(datetime.datetime.now().time())
+
         with db:
             cursor = db.cursor()
             self.lang = cursor.execute('''
                                        SELECT 
                                             language 
                                         FROM 
-                                            settings''').fetchone()[0]
+                                            settings
+                                                        ''').fetchone()[0]
             self.translate = self.translate(self.lang)
 
     # добавление нового значения в таблицу и обновление базы данных
@@ -48,8 +53,8 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
     def translate(self, lang):
         if lang == 'eng':
             self.label_2.setText('Event name')
-            self.label.setText('Date')
-            self.label_3.setText('Time')
+            self.label_3.setText('Date')
+            self.label.setText('Time')
             self.pushButton.setText('Add event')
 
             self.lineEdit.setToolTip('Write here ur event\'s name')
@@ -61,8 +66,8 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
 
         elif lang == 'rus':
             self.label_2.setText('Название события')
-            self.label.setText('Дата')
-            self.label_3.setText('Время')
+            self.label_3.setText('Дата')
+            self.label.setText('Время')
             self.pushButton.setText('Добавить событие')
 
             self.lineEdit.setToolTip('Напишите здесь название вашего события')

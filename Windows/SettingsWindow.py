@@ -1,4 +1,5 @@
 from PyQt5 import QtGui
+from PyQt5.QtWidgets import QFileDialog
 
 from uis import settings
 from UsefulShit import db, AddToRegistry, DeleteFromRegistry
@@ -8,11 +9,10 @@ from Windows.Window import BaseWindow
 
 # класс для окна настроек
 class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
-    def __init__(self, parent, filename):
+    def __init__(self, parent):
         super().__init__()
         self.setupUi(self)
         self.parent = parent
-        self.filename = filename
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
 
@@ -23,11 +23,14 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                                         SELECT 
                                             autoload 
                                         FROM 
-                                            settings''').fetchone()[0]
-            lang = cursor.execute('''SELECT 
+                                            settings
+                                                        ''').fetchone()[0]
+            lang = cursor.execute('''
+                                    SELECT 
                                         language 
                                     FROM 
-                                        settings''').fetchone()[0]
+                                        settings
+                                                    ''').fetchone()[0]
             self.translate(lang)
 
         # изменение radiobuttons в зависимости от значений из бд
@@ -49,11 +52,20 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                cursor.execute('''UPDATE
-                           settings
-                       SET
-                           autoload = 1''')
-                AddToRegistry(self.filename)
+                fname = QFileDialog.getOpenFileName(
+                    self, 'Выберите исполняемый файл с данной программой', '',
+                    'Исполняемый файл (*.exe)')[0]
+
+                if fname:
+                    cursor.execute('''
+                                        UPDATE
+                                            settings
+                                        SET
+                                            autoload = 1
+                                                            ''')
+                    AddToRegistry(fname)
+                else:
+                    self.radioButton_4.setChecked(True)
 
             elif self.sender().text() == 'No':
                 cursor.execute('''
@@ -69,10 +81,11 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             lng = self.sender().text()
             cursor = db.cursor()
             cursor.execute(f'''
-                            UPDATE 
-                                settings 
-                            SET 
-                                language = "{lng}"''')
+                                UPDATE 
+                                    settings 
+                                SET 
+                                    language = "{lng}"
+                                                        ''')
             self.parent.language = lng
 
         self.translate(lng)
@@ -116,5 +129,6 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                                     SELECT 
                                         language 
                                     FROM 
-                                        settings''').fetchone()[0]
+                                        settings
+                                                    ''').fetchone()[0]
         self.parent.translate(lang)
