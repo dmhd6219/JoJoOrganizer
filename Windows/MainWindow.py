@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from uis import design
-from connects import db
+from UsefulShit import db
 
 from Windows.AddEventWindow import AddEventWindow
 from Windows.SettingsWindow import SettingsWindow
@@ -24,13 +24,14 @@ def sort_by_datetime(smth):
 
 # класс главного окна
 class MyMainWindow(design.Ui_mainWindow, BaseWindow):
-    def __init__(self):
+    def __init__(self, filename):
         super().__init__()
         self.setupUi(self)
+        self.filename = filename
 
         self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
-        self.settingsButton.clicked.connect(self.open_settings)
+        self.settingsButton.clicked.connect(lambda : self.open_settings(self.filename))
 
         # загрузка данных из бд при запуске программы
         with db:
@@ -184,8 +185,8 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         if event.key() == Qt.Key_Delete:
             self.delete_event()
 
-    def open_settings(self):
-        self.settings = SettingsWindow(self)
+    def open_settings(self, filename):
+        self.settings = SettingsWindow(self, filename)
         self.settings.show()
 
     def update_db(self):

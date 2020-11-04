@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'design.ui'
+# Form implementation generated from reading ui file 'uis/design.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -17,7 +17,7 @@ class Ui_mainWindow(object):
         mainWindow.resize(536, 324)
         mainWindow.setMinimumSize(QtCore.QSize(536, 324))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         mainWindow.setWindowIcon(icon)
         mainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"

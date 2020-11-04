@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../files/jojo.ico</normaloff>../files/jojo.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
 	background-color:rgb(34, 34, 34);

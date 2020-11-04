@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 from uis import addevent
-from connects import db
+from UsefulShit import db
 
 from Windows.Window import BaseWindow
 

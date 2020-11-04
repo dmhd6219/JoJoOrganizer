@@ -1,18 +1,19 @@
 from PyQt5 import QtGui
 
 from uis import settings
-from connects import db
+from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 
 from Windows.Window import BaseWindow
 
 
 # класс для окна настроек
 class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
-    def __init__(self, parent):
+    def __init__(self, parent, filename):
         super().__init__()
         self.setupUi(self)
         self.parent = parent
-        # [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
+        self.filename = filename
+        [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
 
         # загрузка данных из бд при открытии окна настроек
@@ -43,22 +44,24 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
-    # def sql_autoload(self):
-    # вырезанный функционал(
-    # with db:
-    # cursor = db.cursor()
-    # if self.sender().text() == 'Ya':
-    # cursor.execute('''UPDATE
-    #                       settings
-    #                   SET
-    #                       autoload = 1''')
+    # обновление параметра автозагрузки в бд и в регистре винды
+    def sql_autoload(self):
+        with db:
+            cursor = db.cursor()
+            if self.sender().text() == 'Ya':
+                cursor.execute('''UPDATE
+                           settings
+                       SET
+                           autoload = 1''')
+                AddToRegistry(self.filename)
 
-    # elif self.sender().text() == 'No':
-    # cursor.execute('''
-    #                   UPDATE
-    #                       settings
-    #                   SET
-    #                       autoload = 0''')
+            elif self.sender().text() == 'No':
+                cursor.execute('''
+                       UPDATE
+                           settings
+                      SET
+                           autoload = 0''')
+                DeleteFromRegistry()
 
     # обновление языка программы в базе данных
     def sql_language(self):

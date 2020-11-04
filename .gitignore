@@ -11,3 +11,5 @@ dist
 build
 dist
 main.spec
+files/mydb.db
+Qt Designer.lnk

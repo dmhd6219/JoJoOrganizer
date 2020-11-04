@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'settings.ui'
+# Form implementation generated from reading ui file 'uis/settings.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -15,6 +15,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(460, 359)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
 "    color:white;\n"
@@ -32,7 +35,7 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_2.addWidget(self.label_2)
         self.radioButton_3 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_3.setEnabled(False)
+        self.radioButton_3.setEnabled(True)
         self.radioButton_3.setChecked(False)
         self.radioButton_3.setObjectName("radioButton_3")
         self.autoload_group = QtWidgets.QButtonGroup(MainWindow)
@@ -40,7 +43,7 @@ class Ui_MainWindow(object):
         self.autoload_group.addButton(self.radioButton_3)
         self.horizontalLayout_2.addWidget(self.radioButton_3)
         self.radioButton_4 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_4.setEnabled(False)
+        self.radioButton_4.setEnabled(True)
         self.radioButton_4.setChecked(True)
         self.radioButton_4.setObjectName("radioButton_4")
         self.autoload_group.addButton(self.radioButton_4)

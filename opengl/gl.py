@@ -82,7 +82,7 @@ class OpenGLWidget(QOpenGLWidget):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_TEXTURE_2D)
         
-        self.texture = glutils.createTexture("neskvik.png")
+        self.texture = glutils.createTexture("files/neskvik.png")
 
     def resizeGL(self, width, height):
         side = min(width, height)
