@@ -6,6 +6,8 @@ from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 
 from Windows.Window import BaseWindow
 
+import sys
+
 
 # класс для окна настроек
 class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
@@ -13,6 +15,13 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         super().__init__()
         self.setupUi(self)
         self.parent = parent
+
+        # проверка ос
+        self.platform = sys.platform
+        if 'win' not in self.platform:
+            self.radioButton_4.setEnabled(False)
+            self.radioButton_3.setEnabled(False)
+
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
 
@@ -100,9 +109,15 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     # функция перевода окна
     def translate(self, lang):
         if lang == 'eng':
-            self.radioButton_3.setToolTip('This feature will be available in close future.')
-            self.radioButton_4.setToolTip('This feature will be available in close future.')
-            self.label_2.setToolTip('This feature will be available in close future.')
+            # подсказка для параметра автозагрузки, если ос не винда
+            if self.platform != 'windows':
+                self.radioButton_3.setToolTip(
+                    'On ur OS this feature will be available in close future.')
+                self.radioButton_4.setToolTip(
+                    'On ur OS this feature will be available in close future.')
+                self.label_2.setToolTip('On ur OS this feature will be available in close future.')
+
+            # подсказка для параметра языка
             self.radioButton.setToolTip(
                 'Tick this if you want to see this program on English language')
             self.radioButton_2.setToolTip(
@@ -111,13 +126,20 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.label_2.setText('Autoload')
             self.label.setText('Language')
 
+            # имя окна
             self.setWindowTitle('Settings')
 
         elif lang == 'rus':
-            self.radioButton_3.setToolTip('Эта функция будет доступна в ближайшем будущем.')
-            self.radioButton_4.setToolTip('Эта функция будет доступна в ближайшем будущем.')
-            self.label_2.setToolTip('Эта функция будет доступна в ближайшем будущем.')
+            # подсказка для параметра автозагрузки, если ос не винда
+            if 'win' not in self.platform:
+                self.radioButton_3.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.radioButton_4.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.label_2.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
 
+            # подсказка для параметра языка
             self.radioButton.setToolTip(
                 'Отметьте это, если вы хотите, чтобы эта программа была на пендосском языке')
             self.radioButton_2.setToolTip(
@@ -126,6 +148,7 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
 
+            # имя окна
             self.setWindowTitle('Настройки')
 
     # обнеовление языка основного окна при закрытии этого
