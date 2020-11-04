@@ -68,12 +68,19 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                     self.radioButton_4.setChecked(True)
 
             elif self.sender().text() == 'No':
-                cursor.execute('''
-                       UPDATE
-                           settings
-                      SET
-                           autoload = 0''')
-                DeleteFromRegistry()
+                autoload = cursor.execute('''
+                                                        SELECT 
+                                                            autoload 
+                                                        FROM 
+                                                            settings
+                                                                        ''').fetchone()[0]
+                if autoload:
+                    cursor.execute('''
+                           UPDATE
+                               settings
+                          SET
+                               autoload = 0''')
+                    DeleteFromRegistry()
 
     # обновление языка программы в базе данных
     def sql_language(self):
