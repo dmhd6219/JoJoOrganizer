@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>jojo.ico</normaloff>jojo.ico</iconset>
+    <normaloff>../files/jojo.ico</normaloff>../files/jojo.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget{

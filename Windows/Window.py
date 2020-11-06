@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
 
@@ -7,6 +8,7 @@ class BaseWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(QIcon('files/jojo.ico'))
         self.titleI = 0
         titleloop = QTimer(self)
         titleloop.timeout.connect(self.updateTitle)

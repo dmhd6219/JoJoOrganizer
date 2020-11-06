@@ -1,20 +1,17 @@
 import sqlite3
-import time
-import datetime as dt
 
 from PyQt5.QtCore import Qt
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTableWidgetItem
 
+from Windows.AlarmWindow import AlarmWindow
 from uis import design
-from connects import db
+from UsefulShit import db, BrowserHandler
 
 from Windows.AddEventWindow import AddEventWindow
 from Windows.SettingsWindow import SettingsWindow
 from Windows.Window import BaseWindow
-
-from threading import Thread
 
 
 # функция для сортировки событий по дате и времени
@@ -95,41 +92,29 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
                 for j, elem in enumerate(frag):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
-        # создание потока на проверку времени для будильников
-        self.thread = Thread(target=self.check_time)
+        # создание потока
+        self.thread = QtCore.QThread()
+        # создание объекта для выполнения кода в другом потоке
+        self.browserHandler = BrowserHandler()
+        # перенос объекта в другой поток
+        self.browserHandler.moveToThread(self.thread)
+        # подключение всех сигналов и слотов
+        self.browserHandler.alarmsignal.connect(self.checktime)
+        # подключение сигнала старта потока к методу run у объекта,
+        # который должен выполнять код в другом потоке
+        self.thread.started.connect(self.browserHandler.run)
+        # запуск потока
         self.thread.start()
-        self.stop_thread = False
 
-    # функция для потока на проверку времени для будильников
-    def check_time(self):
-        db = sqlite3.connect('files/mydb.db')
-        while not self.stop_thread:
-            cursor = db.cursor()
-            for event in cursor.execute('''
-                                        SELECT
-                                            * 
-                                        FROM 
-                                            events
-                                        ''').fetchall():
-                # преобразование полученной из бд даты к формату библиотеки datetime для сравнения
-                event_date_list = str(event[-2]).split('.')
-                event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
-                                     int(event_date_list[0]))
-
-                event_time = event[-1]
-                # срабатывание будильника если время подходит
-                if event_date == dt.date.today():
-                    current_time = dt.datetime.now().time()
-                    if str(
-                            event_time) == f'{current_time.hour}:{current_time.minute}':
-                        self.alarm(event[0])
-                        time.sleep(60)
-            time.sleep(1)
-        return
+    # получение сигнала с другого потока
+    @QtCore.pyqtSlot(str, str)
+    def checktime(self, name, time):
+        self.alarm(name, time)
 
     # срабатывание будильника
-    def alarm(self, name):
-        pass
+    def alarm(self, name, times):
+        self.wind = AlarmWindow(name, times)
+        self.wind.show()
 
     # перевод главного окна
     def translate(self, lang):

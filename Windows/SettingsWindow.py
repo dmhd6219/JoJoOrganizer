@@ -1,9 +1,12 @@
 from PyQt5 import QtGui
+from PyQt5.QtWidgets import QFileDialog
 
 from uis import settings
-from connects import db
+from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 
 from Windows.Window import BaseWindow
+
+import sys
 
 
 # класс для окна настроек
@@ -12,7 +15,14 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         super().__init__()
         self.setupUi(self)
         self.parent = parent
-        # [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
+
+        # проверка ос
+        self.platform = sys.platform
+        if 'win' not in self.platform:
+            self.radioButton_4.setEnabled(False)
+            self.radioButton_3.setEnabled(False)
+
+        [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
 
         # загрузка данных из бд при открытии окна настроек
@@ -22,11 +32,14 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                                         SELECT 
                                             autoload 
                                         FROM 
-                                            settings''').fetchone()[0]
-            lang = cursor.execute('''SELECT 
+                                            settings
+                                                        ''').fetchone()[0]
+            lang = cursor.execute('''
+                                    SELECT 
                                         language 
                                     FROM 
-                                        settings''').fetchone()[0]
+                                        settings
+                                                    ''').fetchone()[0]
             self.translate(lang)
 
         # изменение radiobuttons в зависимости от значений из бд
@@ -43,22 +56,40 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
-    # def sql_autoload(self):
-    # вырезанный функционал(
-    # with db:
-    # cursor = db.cursor()
-    # if self.sender().text() == 'Ya':
-    # cursor.execute('''UPDATE
-    #                       settings
-    #                   SET
-    #                       autoload = 1''')
+    # обновление параметра автозагрузки в бд и в регистре винды
+    def sql_autoload(self):
+        with db:
+            cursor = db.cursor()
+            if self.sender().text() == 'Ya':
+                fname = QFileDialog.getOpenFileName(
+                    self, 'Выберите исполняемый файл с данной программой', '',
+                    'Исполняемый файл (*.exe)')[0]
 
-    # elif self.sender().text() == 'No':
-    # cursor.execute('''
-    #                   UPDATE
-    #                       settings
-    #                   SET
-    #                       autoload = 0''')
+                if fname:
+                    cursor.execute('''
+                                        UPDATE
+                                            settings
+                                        SET
+                                            autoload = 1
+                                                            ''')
+                    AddToRegistry(fname)
+                else:
+                    self.radioButton_4.setChecked(True)
+
+            elif self.sender().text() == 'No':
+                autoload = cursor.execute('''
+                                                        SELECT 
+                                                            autoload 
+                                                        FROM 
+                                                            settings
+                                                                        ''').fetchone()[0]
+                if autoload:
+                    cursor.execute('''
+                           UPDATE
+                               settings
+                          SET
+                               autoload = 0''')
+                    DeleteFromRegistry()
 
     # обновление языка программы в базе данных
     def sql_language(self):
@@ -66,10 +97,11 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             lng = self.sender().text()
             cursor = db.cursor()
             cursor.execute(f'''
-                            UPDATE 
-                                settings 
-                            SET 
-                                language = "{lng}"''')
+                                UPDATE 
+                                    settings 
+                                SET 
+                                    language = "{lng}"
+                                                        ''')
             self.parent.language = lng
 
         self.translate(lng)
@@ -77,9 +109,15 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     # функция перевода окна
     def translate(self, lang):
         if lang == 'eng':
-            self.radioButton_3.setToolTip('This feature will be available in close future.')
-            self.radioButton_4.setToolTip('This feature will be available in close future.')
-            self.label_2.setToolTip('This feature will be available in close future.')
+            # подсказка для параметра автозагрузки, если ос не винда
+            if self.platform != 'windows':
+                self.radioButton_3.setToolTip(
+                    'On ur OS this feature will be available in close future.')
+                self.radioButton_4.setToolTip(
+                    'On ur OS this feature will be available in close future.')
+                self.label_2.setToolTip('On ur OS this feature will be available in close future.')
+
+            # подсказка для параметра языка
             self.radioButton.setToolTip(
                 'Tick this if you want to see this program on English language')
             self.radioButton_2.setToolTip(
@@ -88,13 +126,20 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.label_2.setText('Autoload')
             self.label.setText('Language')
 
+            # имя окна
             self.setWindowTitle('Settings')
 
         elif lang == 'rus':
-            self.radioButton_3.setToolTip('Эта функция будет доступна в ближайшем будущем.')
-            self.radioButton_4.setToolTip('Эта функция будет доступна в ближайшем будущем.')
-            self.label_2.setToolTip('Эта функция будет доступна в ближайшем будущем.')
+            # подсказка для параметра автозагрузки, если ос не винда
+            if 'win' not in self.platform:
+                self.radioButton_3.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.radioButton_4.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.label_2.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
 
+            # подсказка для параметра языка
             self.radioButton.setToolTip(
                 'Отметьте это, если вы хотите, чтобы эта программа была на пендосском языке')
             self.radioButton_2.setToolTip(
@@ -103,6 +148,7 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
 
+            # имя окна
             self.setWindowTitle('Настройки')
 
     # обнеовление языка основного окна при закрытии этого
@@ -113,5 +159,6 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                                     SELECT 
                                         language 
                                     FROM 
-                                        settings''').fetchone()[0]
+                                        settings
+                                                    ''').fetchone()[0]
         self.parent.translate(lang)

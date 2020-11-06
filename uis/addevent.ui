@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../files/jojo.ico</normaloff>../files/jojo.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
 	background-color:rgb(34, 34, 34);
@@ -88,7 +92,25 @@ QPushButton:hover{
          </widget>
         </item>
         <item>
-         <widget class="QDateEdit" name="dateEdit"/>
+         <widget class="QDateEdit" name="dateEdit">
+          <property name="dateTime">
+           <datetime>
+            <hour>0</hour>
+            <minute>0</minute>
+            <second>0</second>
+            <year>2020</year>
+            <month>11</month>
+            <day>5</day>
+           </datetime>
+          </property>
+          <property name="minimumDate">
+           <date>
+            <year>2020</year>
+            <month>11</month>
+            <day>5</day>
+           </date>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

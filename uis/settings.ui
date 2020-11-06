@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../files/jojo.jpg</normaloff>../files/jojo.jpg</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
 	background-color:rgb(34, 34, 34);
@@ -36,7 +40,7 @@
         <item>
          <widget class="QRadioButton" name="radioButton_3">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>Ya</string>
@@ -52,7 +56,7 @@
         <item>
          <widget class="QRadioButton" name="radioButton_4">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>No</string>
