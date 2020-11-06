@@ -21,9 +21,10 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
-        music = ['ded.wav', 'bezbab.wav', 'problema.wav', 'loot.wav']
+        music = ['ded', 'bezbab', 'problema', 'loot', 'poh', 'barbariki', 'lubimka', 'auf']
 
-        self.sound = QSound("files/" + random.choice(music))
+        ya = "files/" + random.choice(music) + '.wav'
+        self.sound = QSound(ya)
         self.sound.play()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
