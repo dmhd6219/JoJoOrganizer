@@ -78,7 +78,7 @@ class OpenGLWidget(QOpenGLWidget):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_TEXTURE_2D)
         
-        self.texture = glutils.createTexture("tex{}.png".format(random.choice([1, 2])))
+        self.texture = glutils.createTexture("files/tex{}.png".format(random.choice([1, 2])))
         self.rotateX(-90)
 
     def resizeGL(self, width, height):

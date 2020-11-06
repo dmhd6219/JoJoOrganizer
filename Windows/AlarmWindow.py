@@ -1,14 +1,15 @@
+import os
+import random
+import time
+
 from PyQt5 import QtGui, QtWidgets
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtMultimedia import QSound
+from win32api import GetSystemMetrics
 
 from Windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
-from win32api import GetSystemMetrics
-import random
-import time
-import wave
 
 
 class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
@@ -17,18 +18,24 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
+
         self.name.setText(str(title))
         self.times.setText(str(timess))
 
         self.setWindowTitle(str(title))
 
+        # добавление нашего обаму на опенгл виджет
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
         music = ['ded', 'a4', 'barbariki', 'auf', 'lubimka', 'poh', 'wn1']
-
-        ya = "files/" + random.choice(music) + '.wav'
-        self.sound = QSound(ya)
-        self.sound.play()
+        # сортировка файлов с музыкой, удаление не wav
+        files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
+        ya = "files/music/" + random.choice(files)
+        # проигрывание музыки
+        if ya:
+            self.sound = QSound(ya)
+            self.sound.play()
         
         runner = QTimer(self)
         runner.timeout.connect(self.run)

@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QFileDialog
 
@@ -7,6 +9,7 @@ from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 from Windows.Window import BaseWindow
 
 import sys
+import webbrowser
 
 
 # класс для окна настроек
@@ -24,6 +27,7 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
+        self.musicopen.clicked.connect(self.open_music_folder)
 
         # загрузка данных из бд при открытии окна настроек
         with db:
@@ -55,6 +59,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         elif lang == 'rus':
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
+
+    def open_music_folder(self):
+        print(os.path.dirname("/files/music"))
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
@@ -125,6 +132,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Autoload')
             self.label.setText('Language')
+            self.label_3.setText('Open directory for music')
+
+            self.musicopen.setText('Open directory for music')
 
             # имя окна
             self.setWindowTitle('Settings')
@@ -147,6 +157,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
+            self.label_3.setText('Открыть папку для музыки')
+
+            self.musicopen.setText('Открыть папку для музыки')
 
             # имя окна
             self.setWindowTitle('Настройки')

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(460, 359)
+        MainWindow.resize(502, 470)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -22,7 +22,16 @@ class Ui_MainWindow(object):
 "    background-color:rgb(34, 34, 34);\n"
 "    color:white;\n"
 "}\n"
-"")
+"\n"
+"QPushButton{\n"
+"    background-color: rgb(83, 83, 83);\n"
+"    border-radius: 6.5px;\n"
+"    color:black;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color:rgb(52, 52, 52)\n"
+"}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -66,10 +75,19 @@ class Ui_MainWindow(object):
         self.language_group.addButton(self.radioButton_2)
         self.horizontalLayout.addWidget(self.radioButton_2)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_4.addWidget(self.label_3)
+        self.musicopen = QtWidgets.QPushButton(self.centralwidget)
+        self.musicopen.setObjectName("musicopen")
+        self.horizontalLayout_4.addWidget(self.musicopen)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 460, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 502, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -88,3 +106,5 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "лангуаге"))
         self.radioButton.setText(_translate("MainWindow", "eng"))
         self.radioButton_2.setText(_translate("MainWindow", "rus"))
+        self.label_3.setText(_translate("MainWindow", "add music"))
+        self.musicopen.setText(_translate("MainWindow", "add music"))
