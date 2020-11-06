@@ -28,7 +28,6 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
         # добавление нашего обаму на опенгл виджет
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
-        music = ['ded', 'a4', 'barbariki', 'auf', 'lubimka', 'poh', 'wn1']
         # сортировка файлов с музыкой, удаление не wav
         files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
         # проигрывание музыки
