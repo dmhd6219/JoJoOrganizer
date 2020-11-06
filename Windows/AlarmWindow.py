@@ -19,7 +19,7 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         self.setWindowTitle(str(title))
 
-        self.openGLWidget = gl.OpenGLWidget(self)
+        self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
         music = ['ded.wav', 'bezbab.wav', 'problema.wav', 'loot.wav']
 

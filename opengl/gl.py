@@ -37,13 +37,8 @@ class OpenGLWidget(QOpenGLWidget):
 
     def __init__(self, parent=None, x=0, y=0):
         super(OpenGLWidget, self).__init__(parent)
-<<<<<<< HEAD
-        self.move(x, y)
-        self.resize(self.window().width, self.window().height)
-=======
-        self.resize(500, 500)
         self.move(0, 0)
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
+        self.resize(x, y)
         
         format = QSurfaceFormat();  
         format.setSamples(8);
@@ -83,12 +78,8 @@ class OpenGLWidget(QOpenGLWidget):
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_TEXTURE_2D)
         
-<<<<<<< HEAD
         self.texture = glutils.createTexture("tex{}.png".format(random.choice([1, 2])))
         self.rotateX(-90)
-=======
-        self.texture = glutils.createTexture("files/neskvik.png")
->>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
     def resizeGL(self, width, height):
         side = min(width, height)
