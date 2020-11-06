@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>359</height>
+    <width>502</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,16 @@
 	background-color:rgb(34, 34, 34);
 	color:white;
 }
-</string>
+
+QPushButton{
+	background-color: rgb(83, 83, 83);
+	border-radius: 6.5px;
+	color:black;
+}
+
+QPushButton:hover{
+	background-color:rgb(52, 52, 52)
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -105,6 +114,24 @@
         </item>
        </layout>
       </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>add music</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="musicopen">
+          <property name="text">
+           <string>add music</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </item>
    </layout>
@@ -114,7 +141,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>460</width>
+     <width>502</width>
      <height>21</height>
     </rect>
    </property>

@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtMultimedia import QSound
@@ -5,9 +7,7 @@ from PyQt5.QtMultimedia import QSound
 from Windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
-from win32api import GetSystemMetrics
 import random
-import time
 
 
 class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
@@ -22,13 +22,17 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         self.setWindowTitle(str(title))
 
+        # добавление нашего обаму на опенгл виджет
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
-        music = ['ded', 'bezbab', 'problema', 'loot', 'poh', 'barbariki', 'lubimka', 'auf']
-
-        ya = "files/" + random.choice(music) + '.wav'
-        self.sound = QSound(ya)
-        self.sound.play()
+        # сортировка файлов с музыкой, удаление не wav
+        files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
+        ya = "files/music/" + random.choice(files)
+        # проигрывание музыки
+        if ya:
+            self.sound = QSound(ya)
+            self.sound.play()
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        # остановка музыки при закрытии окна
         self.sound.stop()
