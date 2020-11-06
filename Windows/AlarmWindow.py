@@ -1,11 +1,9 @@
 import os
 import random
-import time
 
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtMultimedia import QSound
-from win32api import GetSystemMetrics
 
 from Windows.Window import BaseWindow
 from opengl import gl
@@ -35,7 +33,7 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
             ya = "files/music/" + random.choice(files)
             self.sound = QSound(ya)
             self.sound.play()
-        
+
         runner = QTimer(self)
         runner.timeout.connect(self.run)
         runner.start(50)
@@ -43,14 +41,14 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
     def run(self):
         s = QtWidgets.QApplication.instance().primaryScreen().size()
         xmax, ymax = s.width() - self.frameGeometry().width(), s.height() - self.frameGeometry().height()
-        
+
         speed = 7
         x = self.x()
         y = self.y()
-        
+
         deltax = random.choice([speed, -speed])
         deltay = random.choice([speed, -speed])
-        
+
         if x + deltax < 0:
             deltax = abs(deltax)
         elif x + deltax > xmax:
@@ -59,7 +57,7 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
             deltay = abs(deltay)
         elif y + deltay > ymax:
             deltay = -abs(deltay)
-            
+
         self.move(x + deltax, y + deltay)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
