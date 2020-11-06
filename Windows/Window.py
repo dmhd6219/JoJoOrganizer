@@ -8,6 +8,7 @@ class BaseWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(QIcon('files/jojo.ico'))
         self.titleI = 0
         titleloop = QTimer(self)
         titleloop.timeout.connect(self.updateTitle)

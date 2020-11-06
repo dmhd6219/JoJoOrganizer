@@ -1,3 +1,5 @@
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 from uis import addevent
@@ -63,7 +65,6 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
 
             self.setWindowTitle('Add new event')
 
-
         elif lang == 'rus':
             self.label_2.setText('Название события')
             self.label_3.setText('Дата')
@@ -75,3 +76,9 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
             self.pushButton.setToolTip('Нажмите эту кнопку, чтобы добавить новое событие')
 
             self.setWindowTitle('Добавить новое событие')
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+
+        # добавление элементов в таблицу с помощью кнопки ENTER
+        if event.key() == Qt.Key_Enter - 1:
+            self.additem()

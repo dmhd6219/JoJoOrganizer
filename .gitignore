@@ -14,3 +14,5 @@ main.spec
 files/mydb.db
 Qt Designer.lnk
 /MainProgram.spec
+/uis/testwindow.py
+/uis/testwindow.ui

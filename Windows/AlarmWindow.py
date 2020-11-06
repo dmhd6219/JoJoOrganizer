@@ -1,19 +1,19 @@
 from Windows.Window import BaseWindow
+from opengl import gl
 from uis import alarm
+from win32api import GetSystemMetrics
+import random
+import time
 
 
 class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
-    def __init__(self, title, time):
+    def __init__(self, title, timess):
         super().__init__()
         self.setupUi(self)
-        self.title = title
-        self.time = time
 
-        self.name.setText(self.title)
-        self.time.setText(self.time)
+        self.name.setText(str(title))
+        self.times.setText(str(timess))
 
-        self.showgl()
+        self.setWindowTitle(str(title))
 
-    def showgl(self):
-        # рандомная опен гл штука
-        pass
+        self.openGLWidget = gl.OpenGLWidget(self)

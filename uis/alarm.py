@@ -9,41 +9,51 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
+        MainWindow.setWindowModality(QtCore.Qt.NonModal)
         MainWindow.resize(500, 667)
         MainWindow.setMinimumSize(QtCore.QSize(500, 667))
         MainWindow.setMaximumSize(QtCore.QSize(500, 667))
         MainWindow.setStyleSheet("QWidget{\n"
-"    background-color:rgb(34, 34, 34);\n"
-"    color:rgb(255, 242, 189);\n"
-"}")
+                                 "    background-color:rgb(34, 34, 34);\n"
+                                 "    color:rgb(255, 242, 189);\n"
+                                 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.openGLWidget = QtWidgets.QOpenGLWidget(self.centralwidget)
         self.openGLWidget.setGeometry(QtCore.QRect(0, 0, 500, 500))
         self.openGLWidget.setObjectName("openGLWidget")
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 520, 441, 91))
+        self.widget.setGeometry(QtCore.QRect(10, 500, 481, 121))
         self.widget.setObjectName("widget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
         self.name = QtWidgets.QLabel(self.widget)
         font = QtGui.QFont()
         font.setPointSize(14)
         self.name.setFont(font)
+        self.name.setStyleSheet("QLabel{\n"
+                                "text-align:center;\n"
+                                "}\n"
+                                "")
+        self.name.setTextFormat(QtCore.Qt.AutoText)
+        self.name.setWordWrap(False)
         self.name.setObjectName("name")
-        self.horizontalLayout.addWidget(self.name)
-        self.label_2 = QtWidgets.QLabel(self.widget)
+        self.name.setAlignment(Qt.AlignCenter)
+        self.verticalLayout.addWidget(self.name)
+        self.times = QtWidgets.QLabel(self.widget)
         font = QtGui.QFont()
         font.setPointSize(14)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout.addWidget(self.label_2)
+        self.times.setFont(font)
+        self.times.setObjectName("times")
+        self.times.setAlignment(Qt.AlignCenter)
+        self.verticalLayout.addWidget(self.times)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 21))
@@ -60,4 +70,4 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.name.setText(_translate("MainWindow", "TextLabel"))
-        self.label_2.setText(_translate("MainWindow", "TextLabel"))
+        self.times.setText(_translate("MainWindow", "TextLabel"))

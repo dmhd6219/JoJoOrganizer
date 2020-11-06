@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,13 +48,13 @@
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>520</y>
-      <width>441</width>
-      <height>91</height>
+      <x>10</x>
+      <y>500</y>
+      <width>481</width>
+      <height>121</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="name">
        <property name="font">
@@ -59,13 +62,25 @@
          <pointsize>14</pointsize>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel{
+text-align:center;
+}
+</string>
+       </property>
        <property name="text">
         <string>TextLabel</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="times">
        <property name="font">
         <font>
          <pointsize>14</pointsize>

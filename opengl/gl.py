@@ -37,7 +37,7 @@ class OpenGLWidget(QOpenGLWidget):
 
     def __init__(self, parent=None):
         super(OpenGLWidget, self).__init__(parent)
-        self.resize(800, 600)
+        self.resize(500, 500)
         self.move(0, 0)
         
         format = QSurfaceFormat();  
