@@ -7,9 +7,9 @@ from uis import settings
 from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 
 from Windows.Window import BaseWindow
+from Windows.FAQWindow import FAQWindow
 
 import sys
-import webbrowser
 
 
 # класс для окна настроек
@@ -27,7 +27,7 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
-        self.musicopen.clicked.connect(self.open_music_folder)
+        self.musicopen.clicked.connect(self.openfaq)
 
         # загрузка данных из бд при открытии окна настроек
         with db:
@@ -60,8 +60,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
-    def open_music_folder(self):
-        print(os.path.dirname("/files/music"))
+    def openfaq(self):
+        self.faqwind = FAQWindow()
+        self.faqwind.show()
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
@@ -132,9 +133,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Autoload')
             self.label.setText('Language')
-            self.label_3.setText('Open directory for music')
+            self.label_3.setText('Open FAQ')
 
-            self.musicopen.setText('Open directory for music')
+            self.musicopen.setText('Open FAQ')
 
             # имя окна
             self.setWindowTitle('Settings')
@@ -157,9 +158,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
-            self.label_3.setText('Открыть папку для музыки')
+            self.label_3.setText('Открыть FAQ')
 
-            self.musicopen.setText('Открыть папку для музыки')
+            self.musicopen.setText('Открыть FAQ')
 
             # имя окна
             self.setWindowTitle('Настройки')

@@ -27,9 +27,9 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         # сортировка файлов с музыкой, удаление не wav
         files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
-        ya = "files/music/" + random.choice(files)
         # проигрывание музыки
-        if ya:
+        if files:
+            ya = "files/music/" + random.choice(files)
             self.sound = QSound(ya)
             self.sound.play()
 

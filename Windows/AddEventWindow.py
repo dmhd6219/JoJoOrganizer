@@ -27,7 +27,7 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
                                         FROM 
                                             settings
                                                         ''').fetchone()[0]
-            self.translate = self.translate(self.lang)
+            self.translate(self.lang)
 
     # добавление нового значения в таблицу и обновление базы данных
     def additem(self):

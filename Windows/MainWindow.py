@@ -14,6 +14,7 @@ from Windows.SettingsWindow import SettingsWindow
 from Windows.Window import BaseWindow
 
 
+
 # функция для сортировки событий по дате и времени
 def sort_by_datetime(smth):
     return smth[2], smth[3], smth[1][0]
