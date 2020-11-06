@@ -22,10 +22,17 @@ class FAQWindow(faq.Ui_MainWindow, BaseWindow):
     def translate(self, lang):
         if lang == 'rus':
             self.label.setText(
-                "Музыку добавлять в папку /files/music\n"
+                "Музыку добавлять в папку /files/music. Работают только wav файлы\n"
                 "Внутри программы события не менять, только удалять и доабвлять новые через кнопки"
-                "\nВроде бы все")
+                "\nПрисутствует ненорматичная лексика\n"
+                "Фотографии из папки files, саму папку files и папку music не удалять."
+                "\nВроде бы все\n\n\n\n"
+                "Credits:\n             Svyatoslav Svyatkin\n               Imran Amirov")
         elif lang == 'eng':
-            self.label.setText('Add music to folder /files/music\n'
+            self.label.setText('Add music to folder /files/music. Only wav files are working\n'
                                'Dont chavge event in program, only add and delete with buttons\n'
-                               'I suppose, thats all')
+                               '\nUnnormal vocabulary is present\n'
+                               'Do not delete photos from the files folder,'
+                               ' the files folder itself and the music folder.'
+                               'I suppose, thats all\n\n\n\nCredits:\n             Svyatoslav'
+                               ' Svyatkin\n             Imran Amirov')
