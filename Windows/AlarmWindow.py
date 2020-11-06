@@ -1,3 +1,6 @@
+from PyQt5 import QtGui
+from PyQt5.QtMultimedia import QSound
+
 from Windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
@@ -17,3 +20,9 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
         self.setWindowTitle(str(title))
 
         self.openGLWidget = gl.OpenGLWidget(self)
+
+        self.sound = QSound("files/ded.wav")
+        self.sound.play()
+
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        self.sound.stop()
