@@ -53,7 +53,46 @@ def useShaders():
     glLinkProgram(program)
     glUseProgram(program)
 
+
+def drawPyramid(xMin, yMin, zMin, xMax, yMax, zMax):
+    glBegin(GL_TRIANGLE_FAN)
+    
+    glTexCoord(0.5, 0.5)
+    glVertex3f(xMin + (xMax - xMin) / 2, yMin + (yMax - yMin) / 2, zMax)
+    glTexCoord(0, 0)
+    
+    glVertex3f(xMin, yMin, zMin)
+    glTexCoord(0, 1)
+    glVertex3f(xMax, yMin, zMin)
+
+
+    glVertex3f(xMax, yMin, zMin)
+    glTexCoord(1, 1)
+    glVertex3f(xMax, yMax, zMin)
+    
+
+    glVertex3f(xMax, yMax, zMin)
+    glTexCoord(1, 0)
+    glVertex3f(xMin, yMax, zMin)
+    
+
+    glVertex3f(xMin, yMax, zMin)
+    glTexCoord(0, 0)
+    glVertex3f(xMin, yMin, zMin)    
+    glEnd()
+    
+    glBegin(GL_QUADS)
+    glVertex3f(xMin, yMin, zMin)
+    glVertex3f(xMin, yMax, zMin)
+    glVertex3f(xMax, yMax, zMin)
+    glVertex3f(xMax, yMin, zMin)
+    glEnd()
+    
+
+
 def drawCube(xMin, yMin, zMin, xMax, yMax, zMax):
+    glBegin(GL_QUADS)
+    
     glTexCoord2f(0, 0)
     glVertex3f(xMin, yMax, zMax)
     glTexCoord2f(1, 0)
@@ -108,7 +147,9 @@ def drawCube(xMin, yMin, zMin, xMax, yMax, zMax):
     glTexCoord2f(0, 1)
     glVertex3f(xMin, yMin, zMin)
     
-
+    glEnd()
+    
+    
 def createTexture(filename):
     img = Image.open(filename)
     img_data = numpy.array(list(img.getdata()), numpy.uint8)

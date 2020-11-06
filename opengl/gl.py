@@ -35,10 +35,10 @@ class TestWindow(QMainWindow):
 
 class OpenGLWidget(QOpenGLWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, x=0, y=0):
         super(OpenGLWidget, self).__init__(parent)
-        self.resize(800, 600)
-        self.move(0, 0)
+        self.move(x, y)
+        self.resize(self.window().width, self.window().height)
         
         format = QSurfaceFormat();  
         format.setSamples(8);
@@ -63,10 +63,10 @@ class OpenGLWidget(QOpenGLWidget):
         deltaY = event.y() - self.lastPos.y()
 
         if event.buttons() & Qt.LeftButton:
-            self.rotationX = self.rotationX + 8 * deltaY % (360 * 16)
-            self.rotationY = self.rotationY + 8 * deltaX % (360 * 16)
+            self.rotateX(deltaY)
+            self.rotateZ(deltaX)
         elif event.buttons() & Qt.RightButton:
-            self.rotationZ = self.rotationZ + 8 * deltaX % (360 * 16)
+            self.rotateY(deltaX)
 
         self.lastPos = event.pos()
     
@@ -74,15 +74,12 @@ class OpenGLWidget(QOpenGLWidget):
         self.posZ += event.angleDelta().y() / 32
         
     def initializeGL(self):
-        # lightPos = (5.0, 5.0, 10.0, 1.0)
-        # glLightfv(GL_LIGHT0, GL_POSITION, lightPos)
-        # glEnable(GL_LIGHTING)
-        # glEnable(GL_LIGHT0)
         glClearColor(0.13, 0.13, 0.13, 1)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_TEXTURE_2D)
         
-        self.texture = glutils.createTexture("neskvik.png")
+        self.texture = glutils.createTexture("tex{}.png".format(random.choice([1, 2])))
+        self.rotateX(-90)
 
     def resizeGL(self, width, height):
         side = min(width, height)
@@ -90,29 +87,29 @@ class OpenGLWidget(QOpenGLWidget):
             return
 
         glViewport((width - side) // 2, (height - side) // 2, side, side)
-
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glFrustum(-1.0, +1.0, -1.0, 1.0, 5.0, 60.0)
+        glFrustum(-1, +1, -1, 1, 5, 60)
+        
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glTranslated(0.0, 0.0, -6.0)
+        glTranslate(0, 0, -6)
     
     def paintGL(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glPushMatrix()
 
         glTranslated(self.posX, self.posY, self.posZ)
-        glRotated(self.rotationX / 16, 1.0, 0.0, 0.0)
-        glRotated(self.rotationY / 16, 0.0, 1.0, 0.0)
-        glRotated(self.rotationZ / 16, 0.0, 0.0, 1.0)
+        glRotate(self.rotationX, 1, 0, 0)
+        glRotate(self.rotationY, 0, 1, 0)
+        glRotate(self.rotationZ, 0, 0, 1)
         
         self.draw()
         glPopMatrix()
     
     def onUpdate(self):
         self.update()
-        self.rotationY += 64
+        self.rotateZ(8)
     
     def draw(self):        
 
@@ -121,9 +118,14 @@ class OpenGLWidget(QOpenGLWidget):
 #         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         glBindTexture(GL_TEXTURE_2D, self.texture)
-        
-        glBegin(GL_QUADS)
-        glutils.drawCube(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5)    
-       
-        glEnd();  
+        glutils.drawPyramid(-0.5, -0.5, -0.5, 0.5, 0.5, 0.5)    
 
+    def rotateX(self, deltaX):
+        self.rotationX = (self.rotationX + deltaX) % 360
+    
+    def rotateY(self, deltaY):
+        self.rotationY = (self.rotationY + deltaY) % 360
+        
+    def rotateZ(self, deltaZ):
+        self.rotationZ = (self.rotationZ + deltaZ) % 360
+    
