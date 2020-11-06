@@ -1,4 +1,5 @@
 from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 from PyQt5.QtMultimedia import QSound
 
 from Windows.Window import BaseWindow
@@ -13,6 +14,8 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
     def __init__(self, title, timess):
         super().__init__()
         self.setupUi(self)
+
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.name.setText(str(title))
         self.times.setText(str(timess))
