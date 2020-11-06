@@ -21,7 +21,7 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         self.openGLWidget = gl.OpenGLWidget(self)
 
-        music = ['ded.wav', 'bezbab.wav', 'problema.wav']
+        music = ['ded.wav', 'bezbab.wav', 'problema.wav', 'loot.wav']
 
         self.sound = QSound("files/" + random.choice(music))
         self.sound.play()
