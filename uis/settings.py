@@ -15,23 +15,20 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(502, 470)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.jpg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("QWidget{\n"
-"    background-color:rgb(34, 34, 34);\n"
-"    color:white;\n"
-"}\n"
-"\n"
-"QPushButton{\n"
-"    background-color: rgb(83, 83, 83);\n"
-"    border-radius: 6.5px;\n"
-"    color:black;\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"    background-color:rgb(52, 52, 52)\n"
-"}")
+                                 "    background-color:rgb(34, 34, 34);\n"
+                                 "    color:white;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton{\n"
+                                 "    background-color: rgb(83, 83, 83);\n"
+                                 "    border-radius: 6.5px;\n"
+                                 "    color:black;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover{\n"
+                                 "    background-color:rgb(52, 52, 52)\n"
+                                 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.centralwidget)
