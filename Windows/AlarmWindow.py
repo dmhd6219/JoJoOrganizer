@@ -10,6 +10,7 @@ from opengl import gl
 from uis import alarm
 
 
+from utils import audio
 class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
     def __init__(self, title, timess):
@@ -27,6 +28,9 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
         # сортировка файлов с музыкой, удаление не wav
+        
+        # audio.convertAll("files/music/")
+        # audio.bassboost("files/music/")
         files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
         # проигрывание музыки
         if files:
