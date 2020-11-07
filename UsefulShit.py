@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 import datetime as dt
 
 # подключение к базе данных
-db = sqlite3.connect('files/mydb.db')
+db = sqlite3.connect('files/settings.db')
 
 
 # добавление в регистр
