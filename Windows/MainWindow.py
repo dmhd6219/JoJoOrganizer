@@ -1,30 +1,27 @@
 import sqlite3
 
-from PyQt5.QtCore import Qt
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QTableWidgetItem
-
-from Windows.AlarmWindow import AlarmWindow
-from Windows.FAQWindow import FAQWindow
-from errors.error import DateError, TimeError
-from uis import design
-from UsefulShit import db, BrowserHandler
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
 from Windows.AddEventWindow import AddEventWindow
+from Windows.AlarmWindow import AlarmWindow
+from Windows.FAQWindow import FAQWindow
 from Windows.SettingsWindow import SettingsWindow
 from Windows.Window import BaseWindow
-
 import datetime as dt
+from uis import design
+from utils.errors import *
+from utils.other import *
 
 
-# функция для сортировки событий по дате и времени
-def sort_by_datetime(smth):
+def sort_by_datetime(smth):  # функция для сортировки событий по дате и времени
     return smth[2], smth[3], smth[1][0]
 
 
 # класс главного окна
-class MyMainWindow(design.Ui_mainWindow, BaseWindow):
+class MyMainWindow(BaseWindow, design.Ui_mainWindow):
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -35,95 +32,77 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         self.faqbutton.clicked.connect(self.open_faq)
 
         self.faqbutton.setStyleSheet("""
-                                        QPushButton{
-                                            image: url(files//faq.png);
-                                            background-repeat: no-repeat;
-                                            width: 50px;
-                                            height: 50px;
-                                                    }
-                                        QPushButton:hover {
-                                            image: url(files//faq1.png);
-                                            background-repeat: no-repeat;
-                                            width: 50px;height: 50px;
-                                                            }""")
-
-        # загрузка данных из бд при запуске программы
-        with db:
+            QPushButton {
+                image: url(iconsdir/faq.png);
+                background-repeat: no-repeat;
+                width: 50px;
+                height: 50px;
+            }
+            
+            QPushButton:hover {
+                image: url(iconsdir/faq1.png);
+                background-repeat: no-repeat;
+                width: 50px;
+                height: 50px;
+            }
+        """.replace("iconsdir", iconsdir))
+       
+        with db:  # загрузка данных из бд при запуске программы
             cursor = db.cursor()
 
             # создание с таблицами с ивентами, если таковой не существует
             cursor.execute('''
-                            CREATE 
-                                table 
-                            IF 
-                                not exists 
-                            events (
-                                number integer PRIMARY KEY, 
-                                name text, 
-                                date text, 
-                                time text
-                                                                  )
-                            ''')
+                CREATE table IF not exists 
+                    events (
+                        number integer PRIMARY KEY, 
+                        name text, 
+                        date text, 
+                        time text
+                    )
+            ''')
+            
             # создание с таблицами с настройками, если таковой не существует
             cursor.execute('''
-                            CREATE 
-                                table 
-                            IF 
-                                not exists 
-                            settings (
-                                id integer PRIMARY KEY DEFAULT(1), 
-                                autoload integer DEFAULT(0), 
-                                language text DEFAULT "eng"
-                                                                    )
-                            ''')
-            # вставка дефолтных данных в таблицу с настройками, если та не заполнена
+                CREATE table IF not exists 
+                    settings (
+                        id integer PRIMARY KEY DEFAULT(1), 
+                        autoload integer DEFAULT(0), 
+                        language text DEFAULT "eng"
+                    )
+            ''')
+            
+            # вставка стандартных данных в таблицу с настройками, если та не заполнена
             try:
                 cursor.execute('''
-                                INSERT INTO 
-                                    settings 
-                                VALUES (
-                                        1, 
-                                        0, 
-                                        "eng"
-                                                )
-                                ''')
+                    INSERT INTO settings 
+                        VALUES (
+                            1, 
+                            0, 
+                            "eng"
+                        )
+                ''')
             except sqlite3.IntegrityError:
                 pass
 
             # получение языка программы из бд и ее перевод
-            self.language = cursor.execute('''
-                                            SELECT 
-                                                language 
-                                            FROM 
-                                                settings
-                                            ''').fetchone()[0]
+            self.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
             self.translate(self.language)
 
             # получение данных о будильниках и добавление их в TableWidget
-            data = cursor.execute('''
-                                    SELECT 
-                                        name, date, time 
-                                    FROM 
-                                        events''').fetchall()
+            data = cursor.execute('SELECT name, date, time FROM events').fetchall()
             self.tableWidget.setRowCount(len(data))
             for i, frag in enumerate(data):
                 for j, elem in enumerate(frag):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
         self.update_db()
-
-        # создание потока
-        self.thread = QtCore.QThread()
-        # создание объекта для выполнения кода в другом потоке
-        self.browserHandler = BrowserHandler()
-        # перенос объекта в другой поток
-        self.browserHandler.moveToThread(self.thread)
-        # подключение всех сигналов и слотов
-        self.browserHandler.alarmsignal.connect(self.checktime)
-        # подключение сигнала старта потока к методу run у объекта,
-        # который должен выполнять код в другом потоке
+        
+        self.thread = QtCore.QThread()  # создание потока
+        self.browserHandler = BrowserHandler()  # создание объекта для выполнения кода в другом потоке
+        self.browserHandler.moveToThread(self.thread)  # перенос объекта в другой поток
+        self.browserHandler.alarmsignal.connect(self.checktime)  # подключение всех сигналов и слотов
+        # подключение сигнала старта потока к методу run у объекта, который должен выполнять код в другом потоке
         self.thread.started.connect(self.browserHandler.run)
-        # запуск потока
         self.thread.start()
 
         self.tableWidget.cellChanged.connect(self.check_change)
@@ -143,8 +122,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
                 try:
                     # получение указанной даты
                     event_date_list = self.tableWidget.item(cell.row(), 1).text().split('.')
-                    event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
-                                         int(event_date_list[0]))
+                    event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]), int(event_date_list[0]))
                     # проверка, является ли написанная дата прошедшей
                     if event_date < dt.date.today():
                         if self.language == 'rus':
@@ -169,8 +147,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
                         raise TimeError('Written time is less than current')
                     with db:
                         cursor = db.cursor()
-                        cursor.execute(
-                            f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
+                        cursor.execute(f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
 
                 # обработчик ошибок
                 except Exception as ex:
@@ -236,7 +213,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
 
     # срабатывание будильника
     def alarm(self, name, times):
-        self.wind = AlarmWindow(name, times)
+        self.wind = AlarmWindow(self, name, times)
         self.wind.show()
 
     # перевод главного окна
@@ -252,7 +229,6 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
             self.deleteEvent.setToolTip('This button deletes selected events')
 
             self.settingsButton.setToolTip('This button opens settings menu')
-
         elif lang == 'rus':
             self.tableWidget.setHorizontalHeaderLabels(['Событие', "Дата", "Время"])
             self.tableWidget.setToolTip('Тут вы можете увидеть ваши события')
@@ -272,7 +248,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
 
     # открытие окна FAQ
     def open_faq(self):
-        self.faq = FAQWindow()
+        self.faq = FAQWindow(self)
         self.faq.show()
 
     # открытие окна с удалением выбранного события
@@ -283,17 +259,14 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
             self.update_db()
         else:
             if self.language == 'eng':
-                self.message = QMessageBox.warning(self, 'Warning',
-                                                   'Please choose events to delete',
+                self.message = QMessageBox.warning(self, 'Warning', 'Please choose events to delete',
                                                    QMessageBox.Cancel)
             elif self.language == 'rus':
-                self.message = QMessageBox.warning(self, 'Предупреждение',
-                                                   'Пожалуйста, выберите события для удаления',
+                self.message = QMessageBox.warning(self, 'Предупреждение', 'Пожалуйста, выберите события для удаления',
                                                    QMessageBox.Cancel)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        # Удаление элементов из таблицы с помощью кнопки DEL
-        if event.key() == Qt.Key_Delete:
+        if event.key() == Qt.Key_Delete:  # Удаление элементов из таблицы с помощью кнопки DEL
             self.delete_event()
 
     def open_settings(self):
@@ -301,8 +274,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         self.settings.show()
 
     def update_db(self):
-        # создаем список из ивентов, чтобы его нормально отсортировать, заливаем его в tablewidget
-        events = []
+        events = []  # создаем список из ивентов, чтобы его нормально отсортировать, заливаем его в tablewidget
         for i in range(self.tableWidget.rowCount()):
             items = [str(i + 1)]
             for j in range(self.tableWidget.columnCount()):
@@ -314,8 +286,7 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
 
             # проверка, прошло ли событие
             if (dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) >= dt.date.today()
-                    and ((int(this_time[0]), int(this_time[1])) >=
-                         (current_time.hour, current_time.minute))):
+                and ((int(this_time[0]), int(this_time[1])) >= (current_time.hour, current_time.minute))):
                 events.append(items)
 
         # сортировка списка с событиями по дате
@@ -326,29 +297,25 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         # заливаем отсортированный список в бд
         with db:
             cursor = db.cursor()
-            cursor.execute('''
-                            DELETE 
-                            FROM 
-                                events''')
+            cursor.execute('DELETE FROM events')
             for i, column in enumerate(events):
                 cursor.execute('''
-                                INSERT INTO 
-                                    events (
-                                            number, 
-                                            name, 
-                                            date, 
-                                            time
-                                                    ) 
-                                    VALUES (
-                                            ?, 
-                                            ?, 
-                                            ?, 
-                                            ?
-                                                )
-                                                    ''', tuple(column))
+                    INSERT INTO events (
+                        number, 
+                        name, 
+                        date, 
+                        time
+                    ) 
+                    VALUES (
+                        ?, 
+                        ?, 
+                        ?, 
+                        ?
+                    )
+                ''', tuple(column))
                 for j, elem in enumerate(column[1::]):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
     # close event и закрытие thread на срабатывание таймера
-    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+    def closeEvent(self, arg0: QtGui.QCloseEvent) -> None:
         self.stop_thread = True

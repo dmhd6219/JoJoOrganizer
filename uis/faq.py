@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'uis/faq.ui'
+# Form implementation generated from reading ui file 'faq.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.1
 #
@@ -45,9 +45,6 @@ class Ui_MainWindow(object):
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName("pushButton_2")
         self.verticalLayout.addWidget(self.pushButton_2)
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.verticalLayout.addWidget(self.pushButton_5)
         self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_6.setObjectName("pushButton_6")
         self.verticalLayout.addWidget(self.pushButton_6)
@@ -70,5 +67,4 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_4.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_2.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton_5.setText(_translate("MainWindow", "PushButton"))
         self.pushButton_6.setText(_translate("MainWindow", "PushButton"))

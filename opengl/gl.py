@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QOpenGLWidget
 
 from Windows.Window import BaseWindow
 from opengl import glutils
-
+from utils.other import *
 
 class TestWindow(BaseWindow):  # тестовое окно для отладки OpenGL
     
@@ -62,12 +62,12 @@ class OpenGLWidget(QOpenGLWidget):
         self.posZ += event.angleDelta().y() / 32
         
     def initializeGL(self):  # настройка openGL (выполняется однократно)
-        glClearColor(0.13, 0.13, 0.13, 1)
+        glClearColor(0.135, 0.135, 0.135, 1)
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_TEXTURE_2D)
         
         # случайный выбор и загрузка одной из текстур
-        self.texture = glutils.createTexture("files/textures/tex{}.png".format(random.choice([1, 2])))
+        self.texture = glutils.createTexture("{}/tex{}.png".format(texturedir, random.choice([1, 2])))
         self.rotateX(-90)
 
     def resizeGL(self, width, height):  # настройка камеры (выполняется при изменении размера окна)

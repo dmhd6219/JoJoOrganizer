@@ -1,58 +1,49 @@
+import datetime
+
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
-from uis import addevent
-from UsefulShit import db
-import datetime
 from Windows.Window import BaseWindow
+from uis import addevent
+from utils.other import *
 
 
 # класс для окна с добавлением нового события
-class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
-    def __init__(self, parent):
-        super().__init__()
+class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
+
+    def __init__(self, mainWindow):
+        super().__init__(mainWindow)
         self.setupUi(self)
-        self.parent = parent
+        self.mainWindow = mainWindow
         self.pushButton.clicked.connect(self.additem)
 
         self.dateEdit.setMinimumDate(datetime.date.today())
         self.timeEdit.setMinimumTime(datetime.datetime.now().time())
 
-        with db:
-            cursor = db.cursor()
-            self.lang = cursor.execute('''
-                                       SELECT 
-                                            language 
-                                        FROM 
-                                            settings
-                                                        ''').fetchone()[0]
-            self.translate(self.lang)
+        self.translate(self.mainWindow.language)
 
-    # добавление нового значения в таблицу и обновление базы данных
-    def additem(self):
+    def additem(self):  # добавление нового значения в таблицу и обновление базы данных
         name = self.lineEdit.text()
         if name:
-            self.parent.tableWidget.setRowCount(self.parent.tableWidget.rowCount() + 1)
-            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 0,
-                                            QTableWidgetItem(name))
-            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 1,
+            self.mainWindow.tableWidget.setRowCount(self.mainWindow.tableWidget.rowCount() + 1)
+            self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 0, QTableWidgetItem(name))
+            self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 1,
                                             QTableWidgetItem(self.dateEdit.text()))
-            self.parent.tableWidget.setItem(self.parent.tableWidget.rowCount() - 1, 2,
+            self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 2,
                                             QTableWidgetItem(self.timeEdit.text()))
-            self.parent.update_db()
+            self.mainWindow.update_db()
             self.close()
         else:
-            if self.lang == 'eng':
+            if self.mainWindow.language == 'eng':
                 self.message = QMessageBox.warning(self, 'Warning', 'Please input name of ur event',
                                                    QMessageBox.Cancel)
-            elif self.lang == 'rus':
+            elif self.mainWindow.language == 'rus':
                 self.message = QMessageBox.warning(self, 'Предупреждение',
                                                    'Пожалуйста, введите название для вашего события',
                                                    QMessageBox.Cancel)
 
-    # перевод окна с добавлением нового события
-    def translate(self, lang):
+    def translate(self, lang):  # перевод окна с добавлением нового события
         if lang == 'eng':
             self.label_2.setText('Event name')
             self.label_3.setText('Date')
@@ -64,7 +55,6 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
             self.pushButton.setToolTip('Press this button to add this event')
 
             self.setWindowTitle('Add new event')
-
         elif lang == 'rus':
             self.label_2.setText('Название события')
             self.label_3.setText('Дата')
@@ -78,7 +68,5 @@ class AddEventWindow(addevent.Ui_MainWindow, BaseWindow):
             self.setWindowTitle('Добавить новое событие')
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-
-        # добавление элементов в таблицу с помощью кнопки ENTER
-        if event.key() == Qt.Key_Enter - 1:
+        if event.key() == Qt.Key_Enter - 1:  # добавление элементов в таблицу с помощью кнопки ENTER
             self.additem()

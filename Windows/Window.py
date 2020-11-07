@@ -2,13 +2,16 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
+from utils.other import iconsdir
+
 
 class BaseWindow(QMainWindow):  # базовый класс для окон с крутым названием
 
-    def __init__(self):
+    def __init__(self, mainWindow=None):
         super().__init__()
+        self.mainWindow = mainWindow
 
-        self.setWindowIcon(QIcon('files/jojo.ico'))
+        self.setWindowIcon(QIcon(f'{iconsdir}/jojo.ico'))
         
         self.capsIndex = 0
         titleloop = QTimer(self)

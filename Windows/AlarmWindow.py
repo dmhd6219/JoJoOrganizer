@@ -8,15 +8,14 @@ from PyQt5.QtMultimedia import QSound
 from Windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
-
-
 from utils import audio
-class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
+from utils.other import *
 
-    def __init__(self, title, timess):
-        super().__init__()
+class AlarmWindow(BaseWindow, alarm.Ui_MainWindow):
+
+    def __init__(self, mainWindow, title, timess):
+        super().__init__(mainWindow)
         self.setupUi(self)
-
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         self.name.setText(str(title))
@@ -24,40 +23,42 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         self.setWindowTitle(str(title))
 
-        # добавление нашего обаму на опенгл виджет
+        # добавление нашего опенгл виджета
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
-        # сортировка файлов с музыкой, удаление не wav
-        
-        files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
+        # сортировка файлов с музыкой
+        files = list(filter(lambda x: x.endswith('.wav'), os.listdir(musicdir)))
         # проигрывание музыки
         if files:
-            ya = "files/music/" + random.choice(files)
+            ya = musicdir + "/" + random.choice(files)
             self.sound = QSound(ya)
             self.sound.play()
-
+        
+        # определение границ дисплея и настройка скорости тряски окна
+        size = QtWidgets.QApplication.instance().primaryScreen().size()
+        self.xmax = size.width() - self.frameGeometry().width()
+        self.ymax = size.height() - self.frameGeometry().height()
+        self.speed = 7
+        
         runner = QTimer(self)
-        runner.timeout.connect(self.run)
-        runner.start(50)
+        runner.timeout.connect(self.startMoving)
+        runner.start(50)  # запуск тряски каждые 0.05с
 
-    def run(self):
-        s = QtWidgets.QApplication.instance().primaryScreen().size()
-        xmax, ymax = s.width() - self.frameGeometry().width(), s.height() - self.frameGeometry().height()
-
-        speed = 7
+    def startMoving(self):  # движение в случайном направлении
         x = self.x()
         y = self.y()
 
-        deltax = random.choice([speed, -speed])
-        deltay = random.choice([speed, -speed])
+        deltax = random.choice([self.speed, -self.speed])
+        deltay = random.choice([self.speed, -self.speed])
 
         if x + deltax < 0:
             deltax = abs(deltax)
-        elif x + deltax > xmax:
+        elif x + deltax > self.xmax:
             deltax = -abs(deltax)
+        
         if y + deltay < 0:
             deltay = abs(deltay)
-        elif y + deltay > ymax:
+        elif y + deltay > self.ymax:
             deltay = -abs(deltay)
 
         self.move(x + deltax, y + deltay)

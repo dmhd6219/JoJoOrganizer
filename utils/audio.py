@@ -35,6 +35,7 @@ def bassboost(songs_dir):
         combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
         combined.export(songs_dir + filename, format="wav")
 
+
 def convertAll(dir):
     for filename in listdir(dir):
         mp3 = AudioSegment.from_mp3(dir + "/" + filename)
