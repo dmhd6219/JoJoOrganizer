@@ -41,7 +41,7 @@ class BrowserHandler(QtCore.QObject):
     # метод, который будет выполнять алгоритм в другом потоке
     def run(self):
         while True:
-            with sqlite3.connect('files/mydb.db') as database:
+            with sqlite3.connect('files/settings.db') as database:
                 cursor = database.cursor()
                 # посылаем сигнал из второго потока в GUI поток
                 for event in cursor.execute('''

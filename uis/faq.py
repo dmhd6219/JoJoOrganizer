@@ -14,8 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        MainWindow.setMinimumSize(QtCore.QSize(800, 600))
+        MainWindow.resize(536, 324)
+        MainWindow.setMinimumSize(QtCore.QSize(536, 324))
         MainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
 "    color:white;\n"
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.pushButton_6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
