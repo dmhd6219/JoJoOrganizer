@@ -150,9 +150,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             # имя окна
             self.setWindowTitle('Настройки')
 
+    # бассбуст)
     def bassboost(self):
         audio.bassboost(musicdir)
 
+    # конвертация треков в wav
     def convert(self):
         audio.convertAll(musicdir)
 

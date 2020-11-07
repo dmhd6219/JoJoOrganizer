@@ -110,8 +110,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
         self.thread.started.connect(self.browserHandler.run)
         self.thread.start()
 
-        self.tableWidget.cellChanged.connect(self.check_change)
         self.tableWidget.doubleClicked.connect(self.save_cell)
+        self.tableWidget.cellChanged.connect(self.check_change)
 
     def save_cell(self):
         global previous_cell
@@ -222,6 +222,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
     def alarm(self, name, times):
         self.wind = AlarmWindow(self, name, times)
         self.wind.show()
+        self.update_db()
 
     # перевод главного окна
     def translate(self, lang):
@@ -283,7 +284,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
         self.settings.show()
 
     def update_db(self):
-        events = []  # создаем список из ивентов, чтобы его нормально отсортировать, заливаем его в tablewidget
+        # создаем список из ивентов, чтобы его нормально отсортировать, заливаем его в tablewidget
+        events = []
         for i in range(self.tableWidget.rowCount()):
             items = [str(i + 1)]
             for j in range(self.tableWidget.columnCount()):
@@ -303,6 +305,9 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
         events.sort(key=sort_by_datetime)
         for i, event in enumerate(events):
             event[0] = str(i + 1)
+
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setRowCount(len(events))
 
         # заливаем отсортированный список в бд
         with db:
