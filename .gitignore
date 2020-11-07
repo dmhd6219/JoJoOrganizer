@@ -1,20 +1,19 @@
 .idea
-__pycache__
 venv
-build
-dist
-
 
 .project
 .pydevproject
 .settings
 
+__pycache__
+
 build
 dist
-main.spec
-files/mydb.db
+MainProgram.spec
+
+files/settings.db
 Qt Designer.lnk
-/MainProgram.spec
-/uis/testwindow.py
-/uis/testwindow.ui
-/Windows/TestWindow.py
+
+uis/testwindow.py
+uis/testwindow.ui
+Windows/TestWindow.py
