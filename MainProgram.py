@@ -11,7 +11,7 @@ def except_hook(cls, exception, traceback):
 app = QApplication(sys.argv)
 
 mainWindow = MyMainWindow()
-exиз четырех треугольников.show()
+mainWindow.show()
 
 sys.excepthook = except_hook
 
