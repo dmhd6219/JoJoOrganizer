@@ -14,7 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(342, 317)
+        MainWindow.resize(536, 324)
+        MainWindow.setMinimumSize(QtCore.QSize(536, 324))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -78,6 +79,8 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_3.addWidget(self.label_3)
         self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit.setDateTime(QtCore.QDateTime(QtCore.QDate(2020, 11, 5), QtCore.QTime(0, 0, 0)))
+        self.dateEdit.setMinimumDate(QtCore.QDate(2020, 11, 5))
         self.dateEdit.setObjectName("dateEdit")
         self.horizontalLayout_3.addWidget(self.dateEdit)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
@@ -87,7 +90,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addLayout(self.verticalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 342, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

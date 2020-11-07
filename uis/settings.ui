@@ -19,10 +19,6 @@
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>../files/jojo.jpg</normaloff>../files/jojo.jpg</iconset>
-  </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
 	background-color:rgb(34, 34, 34);
@@ -123,13 +119,6 @@ QPushButton:hover{
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>add music</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="musicopen">
           <property name="text">
            <string>add music</string>
@@ -137,6 +126,20 @@ QPushButton:hover{
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

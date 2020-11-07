@@ -7,13 +7,13 @@ from uis import settings
 from UsefulShit import db, AddToRegistry, DeleteFromRegistry
 
 from Windows.Window import BaseWindow
-from Windows.FAQWindow import FAQWindow
 
 import sys
-import pathlib
-
 
 # класс для окна настроек
+from utils import audio
+
+
 class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
     def __init__(self, parent):
         super().__init__()
@@ -30,6 +30,9 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
         self.musicopen.clicked.connect(self.open_musicfolder)
 
+        self.pushButton.clicked.connect(self.convert)
+        self.pushButton_2.clicked.connect(self.bassboost)
+
         # загрузка данных из бд при открытии окна настроек
         with db:
             cursor = db.cursor()
@@ -39,13 +42,13 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
                                         FROM 
                                             settings
                                                         ''').fetchone()[0]
-            lang = cursor.execute('''
+            self.language = cursor.execute('''
                                     SELECT 
                                         language 
                                     FROM 
                                         settings
                                                     ''').fetchone()[0]
-            self.translate(lang)
+            self.translate(self.language)
 
         # изменение radiobuttons в зависимости от значений из бд
         if autoload:
@@ -54,10 +57,10 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
         else:
             self.radioButton_3.setChecked(False)
             self.radioButton_4.setChecked(True)
-        if lang == 'eng':
+        if self.language == 'eng':
             self.radioButton.setChecked(True)
             self.radioButton_2.setChecked(False)
-        elif lang == 'rus':
+        elif self.language == 'rus':
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
@@ -142,10 +145,18 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Autoload')
             self.label.setText('Language')
-            self.label_3.setText('Open folder with music')
 
             self.musicopen.setText('Open folder with music')
             self.musicopen.setToolTip('This button opens folder with music')
+
+            self.pushButton.setText('Convert all to wav')
+            self.pushButton.setToolTip('This button will convert all your files from music folder '
+                                       'to wav.\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
+
+            self.pushButton_2.setText('Bassboost all tracks.')
+            self.pushButton.setToolTip(
+                'This button will bassboost all your tracks from music folder.'
+                '\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
 
             # имя окна
             self.setWindowTitle('Settings')
@@ -168,13 +179,27 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
-            self.label_3.setText('Открыть папку с музыкой')
 
             self.musicopen.setText('Открыть папку с музыкой')
             self.musicopen.setToolTip('Эта кнопка открывает папку с музыкой')
 
+            self.pushButton.setText('Конвертировать в wav')
+            self.pushButton.setToolTip('Эта кнопка сконвертирует все ваши файлы из папки с музыкой '
+                                       'в wav.\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
+
+            self.pushButton_2.setText('Забассбустить все треки.')
+            self.pushButton.setToolTip(
+                'Эта кнопка забассбустит все ваши треки из папки с музыкой.'
+                '\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
+
             # имя окна
             self.setWindowTitle('Настройки')
+
+    def bassboost(self):
+        audio.bassboost("files/music/")
+
+    def convert(self):
+        audio.convertAll("files/music/")
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
