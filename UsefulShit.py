@@ -5,32 +5,33 @@ from PyQt5 import QtCore
 
 import datetime as dt
 
+
 # подключение к базе данных
 db = sqlite3.connect('files/settings.db')
 
 
-# добавление в регистр
+# добавить в реестр
 def AddToRegistry(filename):
     # Путь в реестре
-    key_my = OpenKey(HKEY_CURRENT_USER,
+    autorun = OpenKey(HKEY_CURRENT_USER,
                      r'SOFTWARE\Microsoft\Windows\CurrentVersion\Run',
                      0, KEY_ALL_ACCESS)
-    # Установить скрипт в автозагрузку
-    SetValueEx(key_my, 'bigboy', 0, REG_SZ, filename)
+    # Добавить скрипт в автозагрузку
+    SetValueEx(autorun, 'bigboy', 0, REG_SZ, filename)
     # Закрыть реестр
-    CloseKey(key_my)
+    CloseKey(autorun)
 
 
-# удаление из регистра
+# удалить из реестра
 def DeleteFromRegistry():
     # Путь в реестре
-    key_my = OpenKey(HKEY_CURRENT_USER,
+    autorun = OpenKey(HKEY_CURRENT_USER,
                      r'SOFTWARE\Microsoft\Windows\CurrentVersion\Run',
                      0, KEY_ALL_ACCESS)
-    # Установить скрипт в автозагрузку
-    DeleteValue(key_my, 'bigboy')
+    # Удалить скрипт из автозагрузки
+    DeleteValue(autorun, 'bigboy')
     # Закрыть реестр
-    CloseKey(key_my)
+    CloseKey(autorun)
 
 
 class BrowserHandler(QtCore.QObject):
@@ -44,11 +45,11 @@ class BrowserHandler(QtCore.QObject):
                 cursor = database.cursor()
                 # посылаем сигнал из второго потока в GUI поток
                 for event in cursor.execute('''
-                                                        SELECT
-                                                            * 
-                                                        FROM 
-                                                            events
-                                                        ''').fetchall():
+                                            SELECT
+                                                * 
+                                            FROM 
+                                                events
+                                            ''').fetchall():
                     # преобразование полученной из бд даты
                     # к формату библиотеки datetime для сравнения
                     event_date_list = str(event[-2]).split('.')
