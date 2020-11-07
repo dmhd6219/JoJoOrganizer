@@ -29,8 +29,6 @@ class AlarmWindow(alarm.Ui_MainWindow, BaseWindow):
 
         # сортировка файлов с музыкой, удаление не wav
         
-        # audio.convertAll("files/music/")
-        # audio.bassboost("files/music/")
         files = list(filter(lambda x: x.endswith('.wav'), os.listdir("files/music/")))
         # проигрывание музыки
         if files:
