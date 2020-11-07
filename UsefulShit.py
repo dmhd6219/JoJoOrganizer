@@ -44,10 +44,10 @@ class BrowserHandler(QtCore.QObject):
                 cursor = database.cursor()
                 # посылаем сигнал из второго потока в GUI поток
                 for event in cursor.execute('''
-                                                        SELECT
-                                                            * 
-                                                        FROM 
-                                                            events
+                                                SELECT
+                                                      * 
+                                                FROM 
+                                                     events
                                                         ''').fetchall():
                     # преобразование полученной из бд даты
                     # к формату библиотеки datetime для сравнения

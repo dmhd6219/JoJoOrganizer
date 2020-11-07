@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTableWidgetItem
 
 from Windows.AlarmWindow import AlarmWindow
+from Windows.FAQWindow import FAQWindow
 from uis import design
 from UsefulShit import db, BrowserHandler
 
@@ -28,6 +29,20 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
         self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
         self.settingsButton.clicked.connect(self.open_settings)
+        self.faqbutton.clicked.connect(self.open_faq)
+
+        self.faqbutton.setStyleSheet("""
+                                        QPushButton{
+                                            image: url(files//faq.png);
+                                            background-repeat: no-repeat;
+                                            width: 50px;
+                                            height: 50px;
+                                                    }
+                                        QPushButton:hover {
+                                            image: url(files//faq1.png);
+                                            background-repeat: no-repeat;
+                                            width: 50px;height: 50px;
+                                                            }""")
 
         # загрузка данных из бд при запуске программы
         with db:
@@ -146,6 +161,11 @@ class MyMainWindow(design.Ui_mainWindow, BaseWindow):
     def add_event(self):
         self.addevent = AddEventWindow(self)
         self.addevent.show()
+
+    # открытие окна FAQ
+    def open_faq(self):
+        self.faq = FAQWindow()
+        self.faq.show()
 
     # открытие окна с удалением выбранного события
     def delete_event(self):

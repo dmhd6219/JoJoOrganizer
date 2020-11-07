@@ -63,8 +63,8 @@ class Ui_mainWindow(object):
 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
@@ -92,8 +92,26 @@ class Ui_mainWindow(object):
         self.settingsButton.setMinimumSize(QtCore.QSize(191, 41))
         self.settingsButton.setObjectName("settingsButton")
         self.verticalLayout.addWidget(self.settingsButton)
+        self.faqbutton = QtWidgets.QPushButton(self.centralwidget)
+        self.faqbutton.setStyleSheet("QPushButton {\n"
+"background-repeat: no-repeat;\n"
+"width: 50px;\n"
+"    height: 50px;\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"background-repeat: no-repeat;\n"
+"width: 50px;\n"
+"    height: 50px;\n"
+"\n"
+"}")
+        self.faqbutton.setText("")
+        self.faqbutton.setIconSize(QtCore.QSize(50, 50))
+        self.faqbutton.setObjectName("faqbutton")
+        self.verticalLayout.addWidget(self.faqbutton)
         self.horizontalLayout.addLayout(self.verticalLayout)
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2.addLayout(self.horizontalLayout)
         mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))

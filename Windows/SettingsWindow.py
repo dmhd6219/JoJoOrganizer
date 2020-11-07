@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QFileDialog
 
@@ -8,6 +10,7 @@ from Windows.Window import BaseWindow
 from Windows.FAQWindow import FAQWindow
 
 import sys
+import pathlib
 
 
 # класс для окна настроек
@@ -25,7 +28,7 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
         [x.clicked.connect(self.sql_autoload) for x in self.autoload_group.buttons()]
         [x.clicked.connect(self.sql_language) for x in self.language_group.buttons()]
-        self.musicopen.clicked.connect(self.openfaq)
+        self.musicopen.clicked.connect(self.open_musicfolder)
 
         # загрузка данных из бд при открытии окна настроек
         with db:
@@ -58,9 +61,17 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
             self.radioButton_2.setChecked(True)
             self.radioButton.setChecked(False)
 
-    def openfaq(self):
-        self.faqwind = FAQWindow()
-        self.faqwind.show()
+    # открытие папки с музыкой
+    def open_musicfolder(self):
+        application_path = ''
+        # если запускается exe файл
+        if getattr(sys, 'frozen', False):
+            application_path = os.path.dirname(sys.executable)
+        # если запускается py файл
+        elif __file__:
+            application_path = ''.join(os.path.dirname(__file__).split('\\')[:-1:])
+        if application_path:
+            os.system(f'start {application_path}/files/music')
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
@@ -131,9 +142,10 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Autoload')
             self.label.setText('Language')
-            self.label_3.setText('Open FAQ')
+            self.label_3.setText('Open folder with music')
 
-            self.musicopen.setText('Open FAQ')
+            self.musicopen.setText('Open folder with music')
+            self.musicopen.setToolTip('This button opens folder with music')
 
             # имя окна
             self.setWindowTitle('Settings')
@@ -156,9 +168,10 @@ class SettingsWindow(settings.Ui_MainWindow, BaseWindow):
 
             self.label_2.setText('Автозагрузка')
             self.label.setText('Язык')
-            self.label_3.setText('Открыть FAQ')
+            self.label_3.setText('Открыть папку с музыкой')
 
-            self.musicopen.setText('Открыть FAQ')
+            self.musicopen.setText('Открыть папку с музыкой')
+            self.musicopen.setToolTip('Эта кнопка открывает папку с музыкой')
 
             # имя окна
             self.setWindowTitle('Настройки')
