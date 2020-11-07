@@ -46,7 +46,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                 height: 50px;
             }
         """.replace("iconsdir", iconsdir))
-       
+
         with db:  # загрузка данных из бд при запуске программы
             cursor = db.cursor()
 
@@ -60,7 +60,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         time text
                     )
             ''')
-            
+
             # создание с таблицами с настройками, если таковой не существует
             cursor.execute('''
                 CREATE table IF not exists 
@@ -70,7 +70,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         language text DEFAULT "eng"
                     )
             ''')
-            
+
             # вставка стандартных данных в таблицу с настройками, если та не заполнена
             try:
                 cursor.execute('''
@@ -96,12 +96,17 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
         self.update_db()
-        
-        self.thread = QtCore.QThread()  # создание потока
-        self.browserHandler = BrowserHandler()  # создание объекта для выполнения кода в другом потоке
-        self.browserHandler.moveToThread(self.thread)  # перенос объекта в другой поток
-        self.browserHandler.alarmsignal.connect(self.checktime)  # подключение всех сигналов и слотов
-        # подключение сигнала старта потока к методу run у объекта, который должен выполнять код в другом потоке
+
+        # создание потока
+        self.thread = QtCore.QThread()
+        # создание объекта для выполнения кода в другом потоке
+        self.browserHandler = BrowserHandler()
+        # перенос объекта в другой поток
+        self.browserHandler.moveToThread(self.thread)
+        # подключение всех сигналов и слотов
+        self.browserHandler.alarmsignal.connect(self.checktime)
+        # подключение сигнала старта потока к методу run у объекта,
+        # который должен выполнять код в другом потоке
         self.thread.started.connect(self.browserHandler.run)
         self.thread.start()
 
@@ -122,7 +127,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                 try:
                     # получение указанной даты
                     event_date_list = self.tableWidget.item(cell.row(), 1).text().split('.')
-                    event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]), int(event_date_list[0]))
+                    event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
+                                         int(event_date_list[0]))
                     # проверка, является ли написанная дата прошедшей
                     if event_date < dt.date.today():
                         if self.language == 'rus':
@@ -147,7 +153,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         raise TimeError('Written time is less than current')
                     with db:
                         cursor = db.cursor()
-                        cursor.execute(f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
+                        cursor.execute(
+                            f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
 
                 # обработчик ошибок
                 except Exception as ex:
@@ -259,10 +266,12 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             self.update_db()
         else:
             if self.language == 'eng':
-                self.message = QMessageBox.warning(self, 'Warning', 'Please choose events to delete',
+                self.message = QMessageBox.warning(self, 'Warning',
+                                                   'Please choose events to delete',
                                                    QMessageBox.Cancel)
             elif self.language == 'rus':
-                self.message = QMessageBox.warning(self, 'Предупреждение', 'Пожалуйста, выберите события для удаления',
+                self.message = QMessageBox.warning(self, 'Предупреждение',
+                                                   'Пожалуйста, выберите события для удаления',
                                                    QMessageBox.Cancel)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
@@ -286,7 +295,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
             # проверка, прошло ли событие
             if (dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) >= dt.date.today()
-                and ((int(this_time[0]), int(this_time[1])) >= (current_time.hour, current_time.minute))):
+                    and ((int(this_time[0]), int(this_time[1])) >= (
+                            current_time.hour, current_time.minute))):
                 events.append(items)
 
         # сортировка списка с событиями по дате

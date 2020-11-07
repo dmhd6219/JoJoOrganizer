@@ -11,7 +11,8 @@ texturedir = "files/textures"
 
 dbfile = "files/settings.db"
 
-db = sqlite3.connect(dbfile)  # подключение к бд
+# подключение к бд
+db = sqlite3.connect(dbfile)
 
 
 def AddToRegistry(filename):  # добавление в реестр
@@ -39,7 +40,8 @@ class BrowserHandler(QtCore.QObject):
                 cursor = database.cursor()
                 # посылаем сигнал из второго потока в поток GUI
                 for event in cursor.execute(' SELECT * FROM events').fetchall():
-                    # преобразование полученной из бд даты к формату библиотеки datetime для сравнения
+                    # преобразование полученной из бд даты
+                    # к формату библиотеки datetime для сравнения
                     event_date_list = str(event[-2]).split('.')
                     event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]), int(event_date_list[0]))
                     event_time = str(event[-1]).split(':')
@@ -49,5 +51,7 @@ class BrowserHandler(QtCore.QObject):
                         alarm_time = dt.time(hour=int(event_time[0]), minute=int(event_time[1]))
 
                         if (alarm_time.hour, alarm_time.minute) == (current_time.hour, current_time.minute):
-                            self.alarmsignal.emit(event[1], ':'.join(event_time))  # отправка сигнала с событием в основной поток
-                            QtCore.QThread.sleep(60)  # отдых в 60 секунд, чтобы не открывались новые окна)
+                            # отправка сигнала с событием в основной поток
+                            self.alarmsignal.emit(event[1], ':'.join(event_time))
+                            # отдых в 60 секунд, чтобы не открывались новые окна)
+                            QtCore.QThread.sleep(60)

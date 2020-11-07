@@ -23,7 +23,8 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
 
         self.translate(self.mainWindow.language)
 
-    def additem(self):  # добавление нового значения в таблицу и обновление базы данных
+    # добавление нового значения в таблицу и обновление базы данных
+    def additem(self):
         name = self.lineEdit.text()
         if name:
             self.mainWindow.tableWidget.setRowCount(self.mainWindow.tableWidget.rowCount() + 1)
@@ -43,7 +44,8 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
                                                    'Пожалуйста, введите название для вашего события',
                                                    QMessageBox.Cancel)
 
-    def translate(self, lang):  # перевод окна с добавлением нового события
+    # перевод окна с добавлением нового события
+    def translate(self, lang):
         if lang == 'eng':
             self.label_2.setText('Event name')
             self.label_3.setText('Date')
@@ -67,6 +69,7 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
 
             self.setWindowTitle('Добавить новое событие')
 
+    # добавление элементов в таблицу с помощью кнопки ENTER
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        if event.key() == Qt.Key_Enter - 1:  # добавление элементов в таблицу с помощью кнопки ENTER
+        if event.key() == Qt.Key_Enter - 1:
             self.additem()

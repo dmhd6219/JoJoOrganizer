@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QMainWindow
 
 from utils.other import iconsdir
 
-
-class BaseWindow(QMainWindow):  # базовый класс для окон с крутым названием
+# базовый класс для окон с крутым названием
+class BaseWindow(QMainWindow):
 
     def __init__(self, mainWindow=None):
         super().__init__()
@@ -18,7 +18,8 @@ class BaseWindow(QMainWindow):  # базовый класс для окон с �
         titleloop.timeout.connect(self.updateTitle)
         titleloop.start(50)
 
-    def updateTitle(self):  # функция обновления названия окна
+    # функция обновления названия окна
+    def updateTitle(self):
         title = self.windowTitle()
         self.capsIndex = (self.capsIndex + 1) % len(title)
         
