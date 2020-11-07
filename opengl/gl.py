@@ -67,7 +67,7 @@ class OpenGLWidget(QOpenGLWidget):
         glEnable(GL_TEXTURE_2D)
         
         # случайный выбор и загрузка одной из текстур
-        self.texture = glutils.createTexture("files/tex{}.png".format(random.choice([1, 2])))
+        self.texture = glutils.createTexture("files/texures/tex{}.png".format(random.choice([1, 2])))
         self.rotateX(-90)
 
     def resizeGL(self, width, height):  # настройка камеры (выполняется при изменении размера окна)
