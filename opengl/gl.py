@@ -6,7 +6,7 @@ from PyQt5.QtGui import QSurfaceFormat
 from PyQt5.QtWidgets import QOpenGLWidget
 
 from Windows.Window import BaseWindow
-import opengl.glutils
+from opengl import glutils
 
 
 class TestWindow(BaseWindow):  # тестовое окно для отладки OpenGL
@@ -67,7 +67,7 @@ class OpenGLWidget(QOpenGLWidget):
         glEnable(GL_TEXTURE_2D)
         
         # случайный выбор и загрузка одной из текстур
-        self.texture = glutils.createTexture("files/texures/tex{}.png".format(random.choice([1, 2])))
+        self.texture = glutils.createTexture("files/textures/tex{}.png".format(random.choice([1, 2])))
         self.rotateX(-90)
 
     def resizeGL(self, width, height):  # настройка камеры (выполняется при изменении размера окна)
