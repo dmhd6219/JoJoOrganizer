@@ -31,14 +31,16 @@ def bassboost(songs_dir):
     for filename in listdir(songs_dir):
         sample = AudioSegment.from_wav(songs_dir + "/" + filename)
         filtered = sample.low_pass_filter(bass_line_freq(sample.get_array_of_samples()))
-    
+
         combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
-        combined.export(songs_dir + filename, format="wav")
+        combined.export(songs_dir + '/' + filename, format="wav")
 
 
 def convertAll(dir):
+    print(dir)
     for filename in listdir(dir):
+        print(filename)
         mp3 = AudioSegment.from_mp3(dir + "/" + filename)
-        
-        remove(dir + filename)
-        mp3.export(dir + filename.replace(".mp3", ".wav"), format="wav")
+
+        remove(dir + '/' + filename)
+        mp3.export(dir + '/' + filename.replace(".mp3", ".wav"), format="wav")
