@@ -2,7 +2,7 @@ import os
 import sys
 
 from PyQt5 import QtGui
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 from Windows.Window import BaseWindow
 from uis import settings
@@ -152,11 +152,21 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     # бассбуст)
     def bassboost(self):
-        audio.bassboost(musicdir)
+        if self.mainWindow.language == 'rus':
+            self.message = QMessageBox.question(self, 'Предупреждение.', "Продолжить? Все ваши оригинальные треки будут потеряны", QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+        else:
+            self.message = QMessageBox.question(self, 'Warning.', "Proceed? All your original tracks will be lost",QMessageBox.Yes | QMessageBox.Cancel,QMessageBox.Yes)
+        if self.message == QMessageBox.Yes:
+            audio.bassboost(musicdir)
 
     # конвертация треков в wav
     def convert(self):
-        audio.convertAll(musicdir)
+        if self.mainWindow.language == 'rus':
+            self.message = QMessageBox.question(self, 'Предупреждение.', "Продолжить? Все ваши оригинальные треки будут потеряны", QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+        else:
+            self.message = QMessageBox.question(self, 'Warning.', "Proceed? All your original tracks will be lost",QMessageBox.Yes | QMessageBox.Cancel,QMessageBox.Yes)
+        if self.message == QMessageBox.Yes:
+            audio.convertAll(musicdir)
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

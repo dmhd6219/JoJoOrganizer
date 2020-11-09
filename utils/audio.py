@@ -36,11 +36,9 @@ def bassboost(songs_dir):
         combined.export(songs_dir + '/' + filename, format="wav")
 
 
-def convertAll(dir):
-    print(dir)
-    for filename in listdir(dir):
-        print(filename)
-        mp3 = AudioSegment.from_mp3(dir + "/" + filename)
+def convertAll(songs_dir):
+    for filename in listdir(songs_dir):
+        mp3 = AudioSegment.from_mp3(songs_dir + "/" + filename)
 
-        remove(dir + '/' + filename)
-        mp3.export(dir + '/' + filename.replace(".mp3", ".wav"), format="wav")
+        remove(songs_dir + '/' + filename)
+        mp3.export(songs_dir + '/' + filename.replace(".mp3", ".wav"), format="wav")
