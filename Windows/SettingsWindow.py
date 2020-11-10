@@ -58,7 +58,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         elif __file__:  # если запускается py файл
             application_path = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
         if application_path:
-            os.system(f'start {application_path}/{musicdir}')
+            os.startfile(f'{application_path}/{musicdir}')
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
