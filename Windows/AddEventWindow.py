@@ -22,7 +22,19 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
         self.dateEdit.setMinimumDate(datetime.date.today())
         self.timeEdit.setMinimumTime(datetime.datetime.now().time())
 
+        self.dateEdit.dateChanged.connect(self.change_date)
+
         self.translate(self.mainWindow.language)
+
+    def change_date(self):
+        event_date_list = self.dateEdit.text().split('.')
+        event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
+                             int(event_date_list[0]))
+        # проверка, является ли указанная дата будущей
+        if event_date > dt.date.today():
+            self.timeEdit.setMinimumTime(datetime.time(hour=0, minute=0))
+        else:
+            self.timeEdit.setMinimumTime(dt.datetime.now().time())
 
     # добавление нового значения в таблицу и обновление базы данных
     def additem(self):
