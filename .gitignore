@@ -9,7 +9,7 @@ __pycache__
 
 build
 dist
-MainProgram.spec
+main.spec
 
 files/settings.db
 Qt Designer.lnk
