@@ -52,7 +52,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
     # открытие папки с музыкой
     def open_musicfolder(self):
         application_path = ''
-        
+
         if getattr(sys, 'frozen', False):  # если запускается exe файл
             application_path = os.path.dirname(sys.executable)
         elif __file__:  # если запускается py файл
@@ -65,8 +65,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                fname = QFileDialog.getOpenFileName(self, 'Выберите исполняемый файл с данной программой', '',
-                    'Исполняемый файл (*.exe)')[0]
+                fname = \
+                    QFileDialog.getOpenFileName(self,
+                                                'Выберите исполняемый файл с данной программой',
+                                                '',
+                                                'Исполняемый файл (*.exe)')[0]
 
                 if fname:
                     cursor.execute('UPDATE settings SET autoload = 1')
@@ -94,13 +97,17 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         if lang == 'eng':
             # подсказка для параметра автозагрузки, если ос не винда
             if self.platform != 'windows':
-                self.radioButton_3.setToolTip('On ur OS this feature will be available in close future.')
-                self.radioButton_4.setToolTip('On ur OS this feature will be available in close future.')
+                self.radioButton_3.setToolTip(
+                    'On ur OS this feature will be available in close future.')
+                self.radioButton_4.setToolTip(
+                    'On ur OS this feature will be available in close future.')
                 self.label_2.setToolTip('On ur OS this feature will be available in close future.')
 
             # подсказка для параметра языка
-            self.radioButton.setToolTip('Tick this if you want to see this program on English language')
-            self.radioButton_2.setToolTip('Tick this if you want to see this program on Russian language')
+            self.radioButton.setToolTip(
+                'Tick this if you want to see this program on English language')
+            self.radioButton_2.setToolTip(
+                'Tick this if you want to see this program on Russian language')
 
             self.label_2.setText('Autoload')
             self.label.setText('Language')
@@ -123,12 +130,16 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         elif lang == 'rus':
             # подсказка для параметра автозагрузки, если ос не винда
             if 'win' not in self.platform:
-                self.radioButton_3.setToolTip('На вашей ос эта функция будет доступна в ближайшем будущем.')
-                self.radioButton_4.setToolTip('На вашей ос эта функция будет доступна в ближайшем будущем.')
-                self.label_2.setToolTip('На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.radioButton_3.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.radioButton_4.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
+                self.label_2.setToolTip(
+                    'На вашей ос эта функция будет доступна в ближайшем будущем.')
 
             # подсказка для параметра языка
-            self.radioButton.setToolTip('Отметьте это, если вы хотите, чтобы эта программа была на пендосском языке')
+            self.radioButton.setToolTip(
+                'Отметьте это, если вы хотите, чтобы эта программа была на пендосском языке')
             self.radioButton_2.setToolTip(
                 'Отметьте это, если вы хотите, чтобы эта программа была на великом и могучем языке')
 
@@ -153,18 +164,30 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
     # бассбуст)
     def bassboost(self):
         if self.mainWindow.language == 'rus':
-            self.message = QMessageBox.question(self, 'Предупреждение.', "Продолжить? Все ваши оригинальные треки будут потеряны", QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+            self.message = QMessageBox.question(self, 'Предупреждение.',
+                                                "Продолжить? Все ваши оригинальные треки будут потеряны",
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         else:
-            self.message = QMessageBox.question(self, 'Warning.', "Proceed? All your original tracks will be lost",QMessageBox.Yes | QMessageBox.Cancel,QMessageBox.Yes)
+            self.message = QMessageBox.question(self, 'Warning.',
+                                                "Proceed? All your original tracks will be lost",
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         if self.message == QMessageBox.Yes:
             audio.bassboost(musicdir)
 
     # конвертация треков в wav
     def convert(self):
         if self.mainWindow.language == 'rus':
-            self.message = QMessageBox.question(self, 'Предупреждение.', "Продолжить? Все ваши оригинальные треки будут потеряны", QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+            self.message = QMessageBox.question(self, 'Предупреждение.',
+                                                "Продолжить? Все ваши оригинальные треки будут потеряны",
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         else:
-            self.message = QMessageBox.question(self, 'Warning.', "Proceed? All your original tracks will be lost",QMessageBox.Yes | QMessageBox.Cancel,QMessageBox.Yes)
+            self.message = QMessageBox.question(self, 'Warning.',
+                                                "Proceed? All your original tracks will be lost",
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         if self.message == QMessageBox.Yes:
             audio.convertAll(musicdir)
 

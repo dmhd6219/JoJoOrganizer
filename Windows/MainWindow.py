@@ -47,6 +47,55 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             }
         """.replace("iconsdir", iconsdir))
 
+        self.settingsButton.setStyleSheet("""
+                    QPushButton {
+                        image: url(iconsdir/settings.png);
+                        background-repeat: no-repeat;
+                        width: 50px;
+                        height: 50px;
+                    }
+
+                    QPushButton:hover {
+                        image: url(iconsdir/settings1.png);
+                        background-repeat: no-repeat;
+                        width: 50px;
+                        height: 50px;
+                    }
+                """.replace("iconsdir", iconsdir))
+        self.settingsButton.setText('')
+
+        self.deleteEvent.setStyleSheet("""
+                            QPushButton {
+                                image: url(iconsdir/delete.png);
+                                background-repeat: no-repeat;
+                                width: 50px;
+                                height: 50px;
+                            }
+
+                            QPushButton:hover {
+                                image: url(iconsdir/delete1.png);
+                                background-repeat: no-repeat;
+                                width: 50px;
+                                height: 50px;
+                            }
+                        """.replace("iconsdir", iconsdir))
+
+        self.addEvent.setStyleSheet("""
+                                    QPushButton {
+                                        image: url(iconsdir/add.png);
+                                        background-repeat: no-repeat;
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+
+                                    QPushButton:hover {
+                                        image: url(iconsdir/add1.png);
+                                        background-repeat: no-repeat;
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+                                """.replace("iconsdir", iconsdir))
+
         with db:  # загрузка данных из бд при запуске программы
             cursor = db.cursor()
 
@@ -230,10 +279,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             self.tableWidget.setHorizontalHeaderLabels(['Event', 'Data', 'Time'])
             self.tableWidget.setToolTip('Here you can see your events')
 
-            self.addEvent.setText('Add event')
             self.addEvent.setToolTip('This button adds new event')
 
-            self.deleteEvent.setText('Delete selected events')
             self.deleteEvent.setToolTip('This button deletes selected events')
 
             self.settingsButton.setToolTip('This button opens settings menu')
@@ -241,10 +288,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             self.tableWidget.setHorizontalHeaderLabels(['Событие', "Дата", "Время"])
             self.tableWidget.setToolTip('Тут вы можете увидеть ваши события')
 
-            self.addEvent.setText('Новое событие')
             self.addEvent.setToolTip('Эта кнопка добавляет новое событие')
 
-            self.deleteEvent.setText('Удалить событие')
             self.deleteEvent.setToolTip('Эта кнопка удаляет событие')
 
             self.settingsButton.setToolTip('Эта кнопка открывает меню настроек')

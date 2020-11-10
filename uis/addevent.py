@@ -14,8 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(536, 324)
-        MainWindow.setMinimumSize(QtCore.QSize(536, 324))
+        MainWindow.resize(404, 320)
+        MainWindow.setMinimumSize(QtCore.QSize(404, 320))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -90,7 +90,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addLayout(self.verticalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 404, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)

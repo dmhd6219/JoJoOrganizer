@@ -14,24 +14,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(536, 324)
-        mainWindow.setMinimumSize(QtCore.QSize(536, 324))
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        mainWindow.setWindowIcon(icon)
+        mainWindow.resize(404, 320)
+        mainWindow.setMinimumSize(QtCore.QSize(0, 0))
         mainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
 "    color:white;\n"
 "}\n"
 "\n"
 "QPushButton{\n"
-"    background-color: rgb(83, 83, 83);\n"
-"    border-radius: 6.5px;\n"
-"    color:black;\n"
+"background-color: rgb(83, 83, 83);\n"
+"border-radius: 6.5px;\n"
+"color:black;\n"
 "}\n"
 "\n"
 "QPushButton:hover{\n"
-"    background-color:rgb(52, 52, 52)\n"
+"background-color:rgb(52, 52, 52)\n"
 "}\n"
 "\n"
 "QTableWidget\n"
@@ -63,11 +60,10 @@ class Ui_mainWindow(object):
 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setMinimumSize(QtCore.QSize(318, 261))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(0)
@@ -81,18 +77,22 @@ class Ui_mainWindow(object):
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.addEvent = QtWidgets.QPushButton(self.centralwidget)
-        self.addEvent.setMinimumSize(QtCore.QSize(191, 41))
+        self.addEvent.setMinimumSize(QtCore.QSize(60, 60))
+        self.addEvent.setText("")
         self.addEvent.setObjectName("addEvent")
         self.verticalLayout.addWidget(self.addEvent)
         self.deleteEvent = QtWidgets.QPushButton(self.centralwidget)
-        self.deleteEvent.setMinimumSize(QtCore.QSize(191, 41))
+        self.deleteEvent.setMinimumSize(QtCore.QSize(60, 60))
+        self.deleteEvent.setText("")
         self.deleteEvent.setObjectName("deleteEvent")
         self.verticalLayout.addWidget(self.deleteEvent)
         self.settingsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.settingsButton.setMinimumSize(QtCore.QSize(191, 41))
+        self.settingsButton.setMinimumSize(QtCore.QSize(60, 60))
+        self.settingsButton.setText("")
         self.settingsButton.setObjectName("settingsButton")
         self.verticalLayout.addWidget(self.settingsButton)
         self.faqbutton = QtWidgets.QPushButton(self.centralwidget)
+        self.faqbutton.setMinimumSize(QtCore.QSize(60, 60))
         self.faqbutton.setStyleSheet("QPushButton {\n"
 "background-repeat: no-repeat;\n"
 "width: 50px;\n"
@@ -111,10 +111,9 @@ class Ui_mainWindow(object):
         self.faqbutton.setObjectName("faqbutton")
         self.verticalLayout.addWidget(self.faqbutton)
         self.horizontalLayout.addLayout(self.verticalLayout)
-        self.horizontalLayout_2.addLayout(self.horizontalLayout)
         mainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(mainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 536, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 404, 21))
         self.menubar.setObjectName("menubar")
         mainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -133,6 +132,3 @@ class Ui_mainWindow(object):
         item.setText(_translate("mainWindow", "Date"))
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("mainWindow", "Time"))
-        self.addEvent.setText(_translate("mainWindow", "Добавить новое событие"))
-        self.deleteEvent.setText(_translate("mainWindow", "Удалить выбранное событие"))
-        self.settingsButton.setText(_translate("mainWindow", "Settings/Настройки"))

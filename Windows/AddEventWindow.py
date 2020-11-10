@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 from Windows.Window import BaseWindow
 from uis import addevent
-from utils.errors import EmptyTitle, TimeError, DateError
+from utils.errors import EmptyTitle, TimeError, DateError, DateTimeError
 from utils.other import *
 
 
@@ -67,6 +67,15 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
                 if self.mainWindow.language == 'rus':
                     raise DateError('Указанная дата меньше текущей')
                 raise DateError('Written date is less than current')
+
+            with db:
+                cursor = db.cursor()
+                data = cursor.execute('SELECT date, time FROM events').fetchall()
+                for i in data:
+                    if self.dateEdit.text() == i[0] and self.timeEdit.text() == i[1]:
+                        if self.mainWindow.language == 'rus':
+                            raise DateTimeError('Событие с такой датой и временем уже существует')
+                        raise DateTimeError('Event with this date and time already exists')
 
             # добавление события в таблицу
             self.mainWindow.tableWidget.setRowCount(self.mainWindow.tableWidget.rowCount() + 1)

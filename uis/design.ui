@@ -6,22 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>324</height>
+    <width>404</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>536</width>
-    <height>324</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>JoJo's Orginizer😎</string>
-  </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>../files/jojo.ico</normaloff>../files/jojo.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
@@ -30,13 +26,13 @@
 }
 
 QPushButton{
-	background-color: rgb(83, 83, 83);
-	border-radius: 6.5px;
-	color:black;
+background-color: rgb(83, 83, 83);
+border-radius: 6.5px;
+color:black;
 }
 
 QPushButton:hover{
-	background-color:rgb(52, 52, 52)
+background-color:rgb(52, 52, 52)
 }
 
 QTableWidget
@@ -68,73 +64,83 @@ border-radius: 3px;
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="minimumSize">
+       <size>
+        <width>318</width>
+        <height>261</height>
+       </size>
+      </property>
+      <column>
+       <property name="text">
+        <string>Event</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Date</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Time</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QTableWidget" name="tableWidget">
-        <column>
-         <property name="text">
-          <string>Event</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Date</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Time</string>
-         </property>
-        </column>
+       <widget class="QPushButton" name="addEvent">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QPushButton" name="addEvent">
-          <property name="minimumSize">
-           <size>
-            <width>191</width>
-            <height>41</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Добавить новое событие</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="deleteEvent">
-          <property name="minimumSize">
-           <size>
-            <width>191</width>
-            <height>41</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Удалить выбранное событие</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="settingsButton">
-          <property name="minimumSize">
-           <size>
-            <width>191</width>
-            <height>41</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Settings/Настройки</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="faqbutton">
-          <property name="styleSheet">
-           <string notr="true">QPushButton {
+       <widget class="QPushButton" name="deleteEvent">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="settingsButton">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="faqbutton">
+        <property name="minimumSize">
+         <size>
+          <width>60</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
 background-repeat: no-repeat;
 width: 50px;
     height: 50px;
@@ -147,19 +153,17 @@ width: 50px;
     height: 50px;
 
 }</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>50</width>
-            <height>50</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>50</width>
+          <height>50</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -170,7 +174,7 @@ width: 50px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>536</width>
+     <width>404</width>
      <height>21</height>
     </rect>
    </property>
