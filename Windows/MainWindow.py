@@ -252,11 +252,15 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
     # открытие окна с добавлением нового события
     def add_event(self):
         self.addevent = AddEventWindow(self)
+        self.addevent.move(self.x(), self.y())
+        self.addevent.resize(self.width(), self.height())
         self.addevent.show()
 
     # открытие окна FAQ
     def open_faq(self):
         self.faq = FAQWindow(self)
+        self.faq.move(self.x(), self.y())
+        self.faq.resize(self.width(), self.height())
         self.faq.show()
 
     # открытие окна с удалением выбранного события
@@ -281,6 +285,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
     def open_settings(self):
         self.settings = SettingsWindow(self)
+        self.settings.move(self.x(), self.y())
+        self.settings.resize(self.width(), self.height())
         self.settings.show()
 
     def update_db(self):

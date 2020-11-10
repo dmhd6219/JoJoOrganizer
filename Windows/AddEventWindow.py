@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 from Windows.Window import BaseWindow
 from uis import addevent
+from utils.errors import EmptyTitle, TimeError, DateError
 from utils.other import *
 
 
@@ -25,24 +26,55 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
 
     # добавление нового значения в таблицу и обновление базы данных
     def additem(self):
-        name = self.lineEdit.text()
-        if name:
+        try:
+            name = self.lineEdit.text()
+            # проверка, введено ли время
+            if not name:
+                if self.mainWindow.language == 'eng':
+                    raise EmptyTitle('Please input name of ur event')
+
+                elif self.mainWindow.language == 'rus':
+                    raise EmptyTitle('Пожалуйста, введите название для вашего события')
+
+            event_time = self.timeEdit.text().split(':')
+            alarm_time = dt.time(hour=int(event_time[0]), minute=int(event_time[1]))
+            current_time = dt.datetime.now().time()
+            event_date_list = self.dateEdit.text().split('.')
+            event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
+                                 int(event_date_list[0]))
+
+            # проверка, является ли указанное время прошедшим
+            if (alarm_time.hour, alarm_time.minute) < (current_time.hour, current_time.minute) and \
+                    event_date == dt.date.today():
+                if self.mainWindow.language == 'rus':
+                    raise TimeError('Указанное время меньше текущего')
+                raise TimeError('Written time is less than current')
+
+            # проверка, является ли указанная дата прошедшей
+            if event_date < dt.date.today():
+                if self.mainWindow.language == 'rus':
+                    raise DateError('Указанная дата меньше текущей')
+                raise DateError('Written date is less than current')
+
+            # добавление события в таблицу
             self.mainWindow.tableWidget.setRowCount(self.mainWindow.tableWidget.rowCount() + 1)
-            self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 0, QTableWidgetItem(name))
+            self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 0,
+                                                QTableWidgetItem(name))
             self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 1,
-                                            QTableWidgetItem(self.dateEdit.text()))
+                                                QTableWidgetItem(self.dateEdit.text()))
             self.mainWindow.tableWidget.setItem(self.mainWindow.tableWidget.rowCount() - 1, 2,
-                                            QTableWidgetItem(self.timeEdit.text()))
+                                                QTableWidgetItem(self.timeEdit.text()))
+            # обновление базы данных
             self.mainWindow.update_db()
+            # закрытие окна
             self.close()
-        else:
-            if self.mainWindow.language == 'eng':
-                self.message = QMessageBox.warning(self, 'Warning', 'Please input name of ur event',
-                                                   QMessageBox.Cancel)
-            elif self.mainWindow.language == 'rus':
+
+        except Exception as ex:
+            if self.mainWindow.language == 'rus':
                 self.message = QMessageBox.warning(self, 'Предупреждение',
-                                                   'Пожалуйста, введите название для вашего события',
-                                                   QMessageBox.Cancel)
+                                                   str(ex), QMessageBox.Cancel)
+            else:
+                self.message = QMessageBox.warning(self, 'Warning', str(ex), QMessageBox.Cancel)
 
     # перевод окна с добавлением нового события
     def translate(self, lang):

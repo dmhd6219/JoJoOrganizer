@@ -8,3 +8,11 @@ class DateError(DateTimeError):
 
 class TimeError(DateTimeError):
     pass
+
+
+class TitleError(Exception):
+    pass
+
+
+class EmptyTitle(TitleError):
+    pass
