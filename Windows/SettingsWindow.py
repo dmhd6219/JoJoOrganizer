@@ -65,17 +65,8 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                fname = \
-                    QFileDialog.getOpenFileName(self,
-                                                'Выберите исполняемый файл с данной программой',
-                                                '',
-                                                'Исполняемый файл (*.exe)')[0]
-
-                if fname:
-                    cursor.execute('UPDATE settings SET autoload = 1')
-                    AddToRegistry(fname)
-                else:
-                    self.radioButton_4.setChecked(True)
+                cursor.execute('UPDATE settings SET autoload = 1')
+                AddToRegistry(self.mainWindow.filename)
 
             elif self.sender().text() == 'No':
                 autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]

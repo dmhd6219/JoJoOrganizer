@@ -1,4 +1,6 @@
+import os
 import sqlite3
+import sys
 from winreg import *
 
 from PyQt5 import QtCore
@@ -16,9 +18,16 @@ db = sqlite3.connect(dbfile)
 
 
 def AddToRegistry(filename):  # добавление в реестр
+    application_path = ''
+
+    if getattr(sys, 'frozen', False):  # если запускается exe файл
+        application_path = sys.executable
+    elif __file__:  # если запускается py файл
+        application_path = os.path.dirname(filename) + '/' + filename
+
     # Путь в реестре
     autorun = OpenKey(HKEY_CURRENT_USER, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Run', 0, KEY_ALL_ACCESS)
-    SetValueEx(autorun, 'bigboy', 0, REG_SZ, filename)  # Добавить скрипт в автозагрузку
+    SetValueEx(autorun, 'bigboy', 0, REG_SZ, application_path)  # Добавить скрипт в автозагрузку
     CloseKey(autorun)  # Закрыть реестр
 
 

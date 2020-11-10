@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt5.QtWidgets import QApplication
 from Windows.MainWindow import MyMainWindow
@@ -11,7 +12,8 @@ def except_hook(cls, exception, traceback):
 # основной запуск программы :)
 app = QApplication(sys.argv)
 
-mainWindow = MyMainWindow()
+
+mainWindow = MyMainWindow(__file__)
 mainWindow.show()
 
 sys.excepthook = except_hook
