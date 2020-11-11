@@ -23,7 +23,7 @@ def sort_by_datetime(smth):  # функция для сортировки соб
 class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
     def __init__(self):
-        super().__init__()
+        super().__init__(self)
         self.setupUi(self)
 
         self.addEvent.clicked.connect(self.add_event)

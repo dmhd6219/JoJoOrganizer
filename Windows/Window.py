@@ -2,15 +2,15 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
-from utils.other import iconsdir
+from utils.other import iconsdir, resourcePath
+
 
 # базовый класс для окон с крутым названием
 class BaseWindow(QMainWindow):
 
-    def __init__(self, mainWindow=None):
+    def __init__(self, mainWindow):
         super().__init__()
         self.mainWindow = mainWindow
-
         self.setWindowIcon(QIcon(f'{iconsdir}/jojo.ico'))
         
         self.capsIndex = 0

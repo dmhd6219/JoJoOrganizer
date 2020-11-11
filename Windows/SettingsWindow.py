@@ -1,9 +1,11 @@
 import os
 import sys
+from threading import Thread
 
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
+from Windows.ProgressWindow import ProgressWindow
 from Windows.Window import BaseWindow
 from uis import settings
 from utils import audio
@@ -51,14 +53,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     # открытие папки с музыкой
     def open_musicfolder(self):
-        application_path = ''
-
-        if getattr(sys, 'frozen', False):  # если запускается exe файл
-            application_path = os.path.dirname(sys.executable)
-        elif __file__:  # если запускается py файл
-            application_path = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
-        if application_path:
-            os.startfile(f'{application_path}/{musicdir}')
+        os.startfile(f'{cd}/{musicdir}')
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
@@ -164,32 +159,42 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
     # бассбуст)
     def bassboost(self):
         if self.mainWindow.language == 'rus':
-            self.message = QMessageBox.question(self, 'Предупреждение.',
+            self.message = QMessageBox.question(self, 'Предупреждение',
                                                 "Продолжить? Все ваши оригинальные треки будут потеряны",
                                                 QMessageBox.Yes | QMessageBox.Cancel,
                                                 QMessageBox.Yes)
         else:
-            self.message = QMessageBox.question(self, 'Warning.',
+            self.message = QMessageBox.question(self, 'Warning',
                                                 "Proceed? All your original tracks will be lost",
                                                 QMessageBox.Yes | QMessageBox.Cancel,
                                                 QMessageBox.Yes)
         if self.message == QMessageBox.Yes:
-            audio.bassboost(musicdir)
+            if self.mainWindow.language == "rus":
+                label = "Прибавляем децибелы.."
+            else:
+                label = "Adding decibels.."
+            window = ProgressWindow(self.mainWindow, label)
+            window.show()
+            Thread(target=audio.bassboost, args=(musicdir, lambda x: window.setProgress(x))).start()
 
     # конвертация треков в wav
     def convert(self):
         if self.mainWindow.language == 'rus':
-            self.message = QMessageBox.question(self, 'Предупреждение.',
+            self.message = QMessageBox.question(self, 'Предупреждение',
                                                 "Продолжить? Все ваши оригинальные треки будут потеряны",
-                                                QMessageBox.Yes | QMessageBox.Cancel,
-                                                QMessageBox.Yes)
+                                                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
         else:
-            self.message = QMessageBox.question(self, 'Warning.',
+            self.message = QMessageBox.question(self, 'Warning',
                                                 "Proceed? All your original tracks will be lost",
-                                                QMessageBox.Yes | QMessageBox.Cancel,
-                                                QMessageBox.Yes)
+                                                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
         if self.message == QMessageBox.Yes:
-            audio.convertAll(musicdir)
+            if self.mainWindow.language == "rus":
+                label = "Конвертирование.."
+            else:
+                label = "Converting.."
+            window = ProgressWindow(self.mainWindow, label)
+            window.show()
+            Thread(target=audio.convertAll, args=(musicdir, lambda x: window.setProgress(x))).start()
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

@@ -5,26 +5,14 @@ from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QSurfaceFormat
 from PyQt5.QtWidgets import QOpenGLWidget
 
-from Windows.Window import BaseWindow
 from opengl import glutils
 from utils.other import *
-
-class TestWindow(BaseWindow):  # тестовое окно для отладки OpenGL
-    
-    def __init__(self):
-        super().__init__()
-        width = 800
-        height = 600
-        self.setFixedSize(width, height)
-        self.setWindowTitle("qt opengl test window")
-        self.opengl = OpenGLWidget(self, width, height)
-        self.show()
 
 
 class OpenGLWidget(QOpenGLWidget):
 
-    def __init__(self, parent=None, x=0, y=0):
-        super(OpenGLWidget, self).__init__(parent)
+    def __init__(self, mainWindow=None, x=0, y=0):
+        super(OpenGLWidget, self).__init__(mainWindow)
         self.move(0, 0)
         self.resize(x, y)
         
