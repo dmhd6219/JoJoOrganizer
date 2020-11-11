@@ -51,22 +51,27 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     # открытие папки с музыкой
     def open_musicfolder(self):
-        application_path = ''
-
-        if getattr(sys, 'frozen', False):  # если запускается exe файл
-            application_path = os.path.dirname(sys.executable)
-        elif __file__:  # если запускается py файл
-            application_path = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
-        if application_path:
-            os.startfile(f'{application_path}/{musicdir}')
+        os.startfile(f'{application_path}/{musicdir}')
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                cursor.execute('UPDATE settings SET autoload = 1')
-                AddToRegistry(self.mainWindow.filename)
+                with db:
+                    cursor = db.cursor()
+                    if self.sender().text() == 'Ya':
+
+                        if getattr(sys, 'frozen', False):  # если запускается exe файл
+                            application = sys.executable.replace('/', '\\')
+                        elif __file__:  # если запускается py файл
+                            application = self.mainWindow.filename.replace('/', '\\')
+
+                        if application:
+                            cursor.execute('UPDATE settings SET autoload = 1')
+                            AddToRegistry(application)
+                        else:
+                            self.radioButton_4.setChecked(True)
 
             elif self.sender().text() == 'No':
                 autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]

@@ -12,7 +12,6 @@ def except_hook(cls, exception, traceback):
 # основной запуск программы :)
 app = QApplication(sys.argv)
 
-
 mainWindow = MyMainWindow(__file__)
 mainWindow.show()
 
