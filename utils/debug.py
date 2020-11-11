@@ -1,9 +1,12 @@
+import os, sys
+
+from PyQt5 import QtCore
+from PyQt5.Qt import QTextEdit
+
 from Windows.Window import BaseWindow
 from opengl.gl import OpenGLWidget
-from PyQt5.Qt import QTextEdit
-from PyQt5 import QtCore
 
-import os, sys
+
 class GLTestWindow(BaseWindow):  # тестовое окно для отладки OpenGL
     
     def __init__(self):

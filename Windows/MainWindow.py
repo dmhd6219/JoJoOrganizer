@@ -355,7 +355,6 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             elif (int(this_time[0]), int(this_time[1])) >= (current_time.hour, current_time.minute) and dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) == dt.date.today():
                 events.append(items)
 
-
         # сортировка списка с событиями по дате
         events.sort(key=sort_by_datetime)
         for i, event in enumerate(events):

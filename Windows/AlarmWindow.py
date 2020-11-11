@@ -11,6 +11,7 @@ from uis import alarm
 from utils import audio
 from utils.other import *
 
+
 class AlarmWindow(BaseWindow, alarm.Ui_MainWindow):
 
     def __init__(self, mainWindow, title, timess):

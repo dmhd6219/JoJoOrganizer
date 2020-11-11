@@ -11,10 +11,6 @@ from utils import audio
 from utils.other import *
 
 
-
-
-
-
 class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     def __init__(self, mainWindow):
