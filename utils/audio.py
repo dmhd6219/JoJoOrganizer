@@ -12,7 +12,7 @@ import numpy as np
 from utils.other import musicdir
 
 
-attenuate_db = 0
+attenuate_db = 22
 accentuate_db = 4
 
 

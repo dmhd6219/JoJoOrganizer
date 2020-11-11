@@ -52,7 +52,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     # открытие папки с музыкой
     def open_musicfolder(self):
-        os.startfile(f'{cd}/{musicdir}')
+        os.startfile(f'{musicdir}')
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
