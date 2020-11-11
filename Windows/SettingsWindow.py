@@ -62,9 +62,9 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             if self.sender().text() == 'Ya':
                 fname = ''
                 if getattr(sys, 'frozen', False):  # если запускается exe файл
-                    fname = sys.executable
+                    fname = sys.executable.replace('/', '\\')
                 elif __file__:  # если запускается py файл
-                    fname = (__file__)
+                    fname = (self.mainWindow.file.replace('/', '\\'))
 
                 if fname:
                     cursor.execute('UPDATE settings SET autoload = 1')
