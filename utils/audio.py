@@ -12,8 +12,8 @@ import numpy as np
 from utils.other import musicdir
 
 
-attenuate_db = 22
-accentuate_db = 4
+attenuate_db = 0
+accentuate_db = 22
 
 
 def bass_line_freq(track):
