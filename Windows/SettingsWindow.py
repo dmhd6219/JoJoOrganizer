@@ -63,11 +63,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                fname = \
-                    QFileDialog.getOpenFileName(self,
-                                                'Выберите исполняемый файл с данной программой',
-                                                '',
-                                                'Исполняемый файл (*.exe)')[0]
+                fname = ''
+                if getattr(sys, 'frozen', False):  # если запускается exe файл
+                    fname = sys.executable.replace('/', '\\')
+                elif __file__:  # если запускается py файл
+                    fname = (self.mainWindow.file.replace('/', '\\'))
 
                 if fname:
                     cursor.execute('UPDATE settings SET autoload = 1')

