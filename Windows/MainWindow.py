@@ -22,14 +22,21 @@ def sort_by_datetime(smth):  # функция для сортировки соб
 # класс главного окна
 class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
+<<<<<<< HEAD
     def __init__(self):
         super().__init__(self)
+=======
+    def __init__(self, filename):
+        super().__init__()
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
         self.setupUi(self)
 
         self.addEvent.clicked.connect(self.add_event)
         self.deleteEvent.clicked.connect(self.delete_event)
         self.settingsButton.clicked.connect(self.open_settings)
         self.faqbutton.clicked.connect(self.open_faq)
+
+        self.filename = filename
 
         self.faqbutton.setStyleSheet("""
             QPushButton {

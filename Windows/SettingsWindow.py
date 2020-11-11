@@ -53,24 +53,31 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
 
     # открытие папки с музыкой
     def open_musicfolder(self):
+<<<<<<< HEAD
         os.startfile(f'{cd}/{musicdir}')
+=======
+        os.startfile(f'{application_path}/{musicdir}')
+>>>>>>> branch 'main' of https://github.com/Chimnay/imranhello.git
 
     # обновление параметра автозагрузки в бд и в регистре винды
     def sql_autoload(self):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                fname = \
-                    QFileDialog.getOpenFileName(self,
-                                                'Выберите исполняемый файл с данной программой',
-                                                '',
-                                                'Исполняемый файл (*.exe)')[0]
+                with db:
+                    cursor = db.cursor()
+                    if self.sender().text() == 'Ya':
 
-                if fname:
-                    cursor.execute('UPDATE settings SET autoload = 1')
-                    AddToRegistry(fname)
-                else:
-                    self.radioButton_4.setChecked(True)
+                        if getattr(sys, 'frozen', False):  # если запускается exe файл
+                            application = sys.executable.replace('/', '\\')
+                        elif __file__:  # если запускается py файл
+                            application = self.mainWindow.filename.replace('/', '\\')
+
+                        if application:
+                            cursor.execute('UPDATE settings SET autoload = 1')
+                            AddToRegistry(application)
+                        else:
+                            self.radioButton_4.setChecked(True)
 
             elif self.sender().text() == 'No':
                 autoload = cursor.execute('SELECT autoload FROM settings').fetchone()[0]
