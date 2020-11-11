@@ -22,7 +22,7 @@ def sort_by_datetime(smth):  # функция для сортировки соб
 # класс главного окна
 class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
-    def __init__(self):
+    def __init__(self, file):
         super().__init__(self)
         self.setupUi(self)
 
@@ -30,6 +30,8 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
         self.deleteEvent.clicked.connect(self.delete_event)
         self.settingsButton.clicked.connect(self.open_settings)
         self.faqbutton.clicked.connect(self.open_faq)
+
+        self.file = file
 
         self.faqbutton.setStyleSheet("""
             QPushButton {
@@ -347,10 +349,12 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             current_time = dt.datetime.now().time()
 
             # проверка, прошло ли событие
-            if (dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) >= dt.date.today()
-                    and ((int(this_time[0]), int(this_time[1])) >= (
-                            current_time.hour, current_time.minute))):
+            if dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) > dt.date.today():
                 events.append(items)
+
+            elif (int(this_time[0]), int(this_time[1])) >= (current_time.hour, current_time.minute) and dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) == dt.date.today():
+                events.append(items)
+
 
         # сортировка списка с событиями по дате
         events.sort(key=sort_by_datetime)
@@ -382,6 +386,3 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                 for j, elem in enumerate(column[1::]):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
 
-    # close event и закрытие thread на срабатывание таймера
-    def closeEvent(self, arg0: QtGui.QCloseEvent) -> None:
-        self.stop_thread = True

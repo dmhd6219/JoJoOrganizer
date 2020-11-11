@@ -16,9 +16,6 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(404, 320)
         MainWindow.setMinimumSize(QtCore.QSize(404, 320))
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("uis\\../files/jojo.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        MainWindow.setWindowIcon(icon)
         MainWindow.setStyleSheet("QWidget{\n"
 "    background-color:rgb(34, 34, 34);\n"
 "    color:white;\n"

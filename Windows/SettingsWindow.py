@@ -60,11 +60,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         with db:
             cursor = db.cursor()
             if self.sender().text() == 'Ya':
-                fname = \
-                    QFileDialog.getOpenFileName(self,
-                                                'Выберите исполняемый файл с данной программой',
-                                                '',
-                                                'Исполняемый файл (*.exe)')[0]
+                fname = ''
+                if getattr(sys, 'frozen', False):  # если запускается exe файл
+                    fname = sys.executable
+                elif __file__:  # если запускается py файл
+                    fname = (__file__)
 
                 if fname:
                     cursor.execute('UPDATE settings SET autoload = 1')
@@ -182,11 +182,13 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
         if self.mainWindow.language == 'rus':
             self.message = QMessageBox.question(self, 'Предупреждение',
                                                 "Продолжить? Все ваши оригинальные треки будут потеряны",
-                                                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         else:
             self.message = QMessageBox.question(self, 'Warning',
                                                 "Proceed? All your original tracks will be lost",
-                                                QMessageBox.Yes | QMessageBox.Cancel, QMessageBox.Yes)
+                                                QMessageBox.Yes | QMessageBox.Cancel,
+                                                QMessageBox.Yes)
         if self.message == QMessageBox.Yes:
             if self.mainWindow.language == "rus":
                 label = "Конвертирование.."
@@ -194,7 +196,8 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Converting.."
             window = ProgressWindow(self.mainWindow, label)
             window.show()
-            Thread(target=audio.convertAll, args=(musicdir, lambda x: window.setProgress(x))).start()
+            Thread(target=audio.convertAll,
+                   args=(musicdir, lambda x: window.setProgress(x))).start()
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
