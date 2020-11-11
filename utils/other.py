@@ -59,18 +59,18 @@ class BrowserHandler(QtCore.QObject):
                             QtCore.QThread.sleep(60)
 
 
+cd = ""
+if getattr(sys, 'frozen', False):  # если запускается exe файл
+    cd = '/'.join(os.path.dirname(sys.executable).split('\\'))
+elif __file__:  # если запускается py файл
+    cd = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
+
 iconsdir = resourcePath("files/icons")
 texturedir = resourcePath("files/textures")
 
-musicdir = "files/music"
-dbfile = "files/settings.db"
+musicdir = cd + "/files/music"
+dbfile = cd + "/files/settings.db"
 
-cd = ""
-if getattr(sys, 'frozen', False):  # если запускается exe файл
-    cd = os.path.dirname(sys.executable)
-elif __file__:  # если запускается py файл
-    cd = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
-            
 if not os.path.exists(musicdir):
     os.makedirs(musicdir)
     

@@ -4,7 +4,8 @@ cls
 
 call clean.cmd
 
-pyinstaller main.py -F -y --clean -i="files\icons\jojo.ico" ^
+set PYTHONOPTIMIZE=1
+pyinstaller main.py -w -F --clean -y -i="files\icons\jojo.ico" ^
 	--add-data="files\textures;files\textures" ^
 	--add-data="files\icons;files\icons" ^
 	--add-binary="ffmpeg.exe;." ^
