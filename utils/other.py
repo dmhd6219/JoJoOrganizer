@@ -71,8 +71,8 @@ if getattr(sys, 'frozen', False):  # если запускается exe фай�
 elif __file__:  # если запускается py файл
     cd = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
             
-if not os.path.exists(musicdir):
-    os.makedirs(musicdir)
+if not os.path.exists(cd + '/' + musicdir):
+    os.makedirs(cd + '/' + musicdir)
     
 # подключение к бд
-db = sqlite3.connect(dbfile)
+db = sqlite3.connect(cd + '/' + dbfile)
