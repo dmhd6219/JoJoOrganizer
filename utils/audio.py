@@ -11,7 +11,6 @@ from pydub import AudioSegment
 import numpy as np
 from utils.other import musicdir
 
-
 attenuate_db = 0
 accentuate_db = 22
 
@@ -35,14 +34,17 @@ class Bassbooster(QtCore.QObject):
 
     def run(self):
         list = listdir(musicdir)
-        for filename in list:
-            sample = AudioSegment.from_wav(musicdir + "/" + filename)
-            filtered = sample.low_pass_filter(bass_line_freq(sample.get_array_of_samples()))
-    
-            combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
-            combined.export(musicdir + '/' + filename, format="wav")
-            progress = (list.index(filename) + 1) / len(list) * 100
-            self.setProgress.emit(progress)
+        if list:
+            for filename in list:
+                sample = AudioSegment.from_wav(musicdir + "/" + filename)
+                filtered = sample.low_pass_filter(bass_line_freq(sample.get_array_of_samples()))
+        
+                combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
+                combined.export(musicdir + '/' + filename, format="wav")
+                progress = (list.index(filename) + 1) / len(list) * 100
+                self.setProgress.emit(progress)
+        else:
+            self.setProgress.emit(100)
 
 
 class Converter(QtCore.QObject):
@@ -50,12 +52,15 @@ class Converter(QtCore.QObject):
 
     def run(self):
         list = listdir(musicdir)
-        for filename in list:
-            if not filename.endswith("wav"):            
-                mp3 = AudioSegment.from_mp3(musicdir + "/" + filename)
-        
-                remove(musicdir + '/' + filename)
-                mp3.export(musicdir + '/' + filename.replace(".mp3", ".wav"), format="wav")
+        if list:
+            for filename in list:
+                if not filename.endswith("wav"):            
+                    mp3 = AudioSegment.from_mp3(musicdir + "/" + filename)
             
-            progress = (list.index(filename) + 1) / len(list) * 100
-            self.setProgress.emit(progress)
+                    remove(musicdir + '/' + filename)
+                    mp3.export(musicdir + '/' + filename.replace(".mp3", ".wav"), format="wav")
+                
+                progress = (list.index(filename) + 1) / len(list) * 100
+                self.setProgress.emit(progress)
+        else:
+            self.setProgress.emit(100)

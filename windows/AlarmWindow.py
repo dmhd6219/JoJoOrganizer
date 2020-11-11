@@ -65,4 +65,5 @@ class AlarmWindow(BaseWindow, alarm.Ui_MainWindow):
         self.move(x + deltax, y + deltay)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        self.sound.stop()
+        if getattr(self, "sound", False):
+            self.sound.stop()

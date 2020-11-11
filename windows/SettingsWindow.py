@@ -155,18 +155,18 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             # имя окна
             self.setWindowTitle('Настройки')
 
-    def startTaskNewThread(self, window):
-        window.show()
-        if isinstance(self.thread, QtCore.QThread):
-            self.thread.exit()
-            self.thread.wait()
+    def startTaskNewThread(self):
+        self.pwindow.show()
+        if getattr(self, "athread", False):
+            self.athread.exit()
+            self.athread.wait()
 
-        self.thread = QtCore.QThread()
-        self.thread.setTerminationEnabled(True)
-        self.worker.moveToThread(self.thread)
-        self.worker.setProgress.connect(window.setProgress)
-        self.thread.started.connect(self.worker.run)
-        self.thread.start()
+        self.athread = QtCore.QThread()
+        self.athread.setTerminationEnabled(True)
+        self.worker.moveToThread(self.athread)
+        self.worker.setProgress.connect(self.pwindow.setProgress)
+        self.athread.started.connect(self.worker.run)
+        self.athread.start()
     
     # бассбуст)
     def bassboost(self):
@@ -185,9 +185,9 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Прибавляем децибелы.."
             else:
                 label = "Adding decibels.."
-            self.window = ProgressWindow(self.mainWindow, label)
+            self.pwindow = ProgressWindow(self.mainWindow, label)
             self.worker = audio.Bassbooster()
-            self.startTaskNewThread(self.window)
+            self.startTaskNewThread()
 
     # конвертация треков в wav
     def convert(self):
@@ -204,9 +204,9 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Конвертирование.."
             else:
                 label = "Converting.."
-            self.window = ProgressWindow(self.mainWindow, label)
+            self.pwindow = ProgressWindow(self.mainWindow, label)
             self.worker = audio.Converter()
-            self.startTaskNewThread(self.window)
+            self.startTaskNewThread()
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
