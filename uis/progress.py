@@ -15,7 +15,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.setWindowModality(QtCore.Qt.ApplicationModal)
-        Dialog.resize(404, 71)
+        Dialog.resize(404, 69)
         Dialog.setToolTip("")
         Dialog.setStatusTip("")
         Dialog.setStyleSheet("QWidget{\n"

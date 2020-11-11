@@ -1,8 +1,7 @@
 import os
 import sys
-from threading import Thread
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 from Windows.ProgressWindow import ProgressWindow
@@ -10,6 +9,10 @@ from Windows.Window import BaseWindow
 from uis import settings
 from utils import audio
 from utils.other import *
+
+
+
+
 
 
 class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
@@ -114,7 +117,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             self.pushButton.setToolTip('This button will convert all your files from music folder '
                                        'to wav.\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
 
-            self.pushButton_2.setText('Bassboost all tracks.')
+            self.pushButton_2.setText('Auto-Bassboost')
             self.pushButton.setToolTip(
                 'This button will bassboost all your tracks from music folder.'
                 '\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
@@ -148,7 +151,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             self.pushButton.setToolTip('Эта кнопка сконвертирует все ваши файлы из папки с музыкой '
                                        'в wav.\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
 
-            self.pushButton_2.setText('Забассбустить все треки.')
+            self.pushButton_2.setText('Авто-бассбуст')
             self.pushButton.setToolTip(
                 'Эта кнопка забассбустит все ваши треки из папки с музыкой.'
                 '\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
@@ -156,6 +159,19 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             # имя окна
             self.setWindowTitle('Настройки')
 
+    def startTaskNewThread(self, window):
+        window.show()
+        if isinstance(self.thread, QtCore.QThread):
+            self.thread.exit()
+            self.thread.wait()
+
+        self.thread = QtCore.QThread()
+        self.thread.setTerminationEnabled(True)
+        self.worker.moveToThread(self.thread)
+        self.worker.setProgress.connect(window.setProgress)
+        self.thread.started.connect(self.worker.run)
+        self.thread.start()
+    
     # бассбуст)
     def bassboost(self):
         if self.mainWindow.language == 'rus':
@@ -173,9 +189,9 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Прибавляем децибелы.."
             else:
                 label = "Adding decibels.."
-            window = ProgressWindow(self.mainWindow, label)
-            window.show()
-            Thread(target=audio.bassboost, args=(musicdir, lambda x: window.setProgress(x))).start()
+            self.window = ProgressWindow(self.mainWindow, label)
+            self.worker = audio.Bassbooster()
+            self.startTaskNewThread(self.window)
 
     # конвертация треков в wav
     def convert(self):
@@ -192,9 +208,9 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Конвертирование.."
             else:
                 label = "Converting.."
-            window = ProgressWindow(self.mainWindow, label)
-            window.show()
-            Thread(target=audio.convertAll, args=(musicdir, lambda x: window.setProgress(x))).start()
+            self.window = ProgressWindow(self.mainWindow, label)
+            self.worker = audio.Converter()
+            self.startTaskNewThread(self.window)
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

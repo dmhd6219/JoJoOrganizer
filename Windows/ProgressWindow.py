@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.Qt import QDialog, Qt
 from PyQt5.QtGui import QIcon
 
@@ -19,9 +20,12 @@ class ProgressWindow(QDialog, progress.Ui_Dialog):
     # функция перевода
     def translate(self, lang):
         if lang == 'rus':
-            self.setWindowTitle('Пожалуйста подождите')
+            self.setWindowTitle('Работаем...')
         elif lang == 'eng':
-            self.setWindowTitle('Please wait')
+            self.setWindowTitle('Working...')
 
+    @QtCore.pyqtSlot(int)
     def setProgress(self, percentage):
+        if (percentage >= 100):
+            self.close()
         self.progressBar.setValue(percentage)
