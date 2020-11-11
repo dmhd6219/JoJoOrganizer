@@ -29,6 +29,26 @@ def resourcePath(relative_path):  # получить абсолютный пут
     return run_path.replace("\\", "/") + "/" + relative_path
 
 
+
+iconsdir = resourcePath("files/icons")
+texturedir = resourcePath("files/textures")
+
+musicdir = "files/music"
+dbfile = "files/settings.db"
+
+cd = ""
+if getattr(sys, 'frozen', False):  # если запускается exe файл
+    cd = os.path.dirname(sys.executable)
+elif __file__:  # если запускается py файл
+    cd = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
+            
+if not os.path.exists(cd + '/' + musicdir):
+    os.makedirs(cd + '/' + musicdir)
+    
+# подключение к бд
+db = sqlite3.connect(cd + '/' + dbfile)
+
+
 class BrowserHandler(QtCore.QObject):
     running = False
     alarmsignal = QtCore.pyqtSignal(str, str)
@@ -36,7 +56,7 @@ class BrowserHandler(QtCore.QObject):
     # метод, который будет выполнять алгоритм в другом потоке
     def run(self):
         while True:
-            with sqlite3.connect(dbfile) as database:
+            with sqlite3.connect(cd + '/' + dbfile) as database:
                 cursor = database.cursor()
                 # посылаем сигнал из второго потока в поток GUI
                 for event in cursor.execute(' SELECT * FROM events').fetchall():
@@ -57,22 +77,3 @@ class BrowserHandler(QtCore.QObject):
                             self.alarmsignal.emit(event[1], ':'.join(event_time))
                             # отдых в 60 секунд, чтобы не открывались новые окна)
                             QtCore.QThread.sleep(60)
-
-
-iconsdir = resourcePath("files/icons")
-texturedir = resourcePath("files/textures")
-
-musicdir = "files/music"
-dbfile = "files/settings.db"
-
-cd = ""
-if getattr(sys, 'frozen', False):  # если запускается exe файл
-    cd = os.path.dirname(sys.executable)
-elif __file__:  # если запускается py файл
-    cd = '/'.join(os.path.dirname(__file__).split('\\')[:-1:])
-            
-if not os.path.exists(cd + '/' + musicdir):
-    os.makedirs(cd + '/' + musicdir)
-    
-# подключение к бд
-db = sqlite3.connect(cd + '/' + dbfile)
