@@ -4,11 +4,11 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
-from Windows.AddEventWindow import AddEventWindow
-from Windows.AlarmWindow import AlarmWindow
-from Windows.FAQWindow import FAQWindow
-from Windows.SettingsWindow import SettingsWindow
-from Windows.Window import BaseWindow
+from windows.AddEventWindow import AddEventWindow
+from windows.AlarmWindow import AlarmWindow
+from windows.FAQWindow import FAQWindow
+from windows.SettingsWindow import SettingsWindow
+from windows.Window import BaseWindow
 import datetime as dt
 from uis import design
 from utils.errors import *

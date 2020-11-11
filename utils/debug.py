@@ -3,7 +3,7 @@ import os, sys
 from PyQt5 import QtCore
 from PyQt5.Qt import QTextEdit
 
-from Windows.Window import BaseWindow
+from windows.Window import BaseWindow
 from opengl.gl import OpenGLWidget
 
 

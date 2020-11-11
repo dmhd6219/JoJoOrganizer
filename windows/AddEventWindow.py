@@ -4,7 +4,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
-from Windows.Window import BaseWindow
+from windows.Window import BaseWindow
 from uis import addevent
 from utils.errors import EmptyTitle, TimeError, DateError, DateTimeError
 from utils.other import *

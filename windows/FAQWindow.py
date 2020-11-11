@@ -1,4 +1,4 @@
-from Windows.Window import BaseWindow
+from windows.Window import BaseWindow
 from uis import faq
 from utils.other import *
 

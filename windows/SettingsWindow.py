@@ -4,8 +4,8 @@ import sys
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
-from Windows.ProgressWindow import ProgressWindow
-from Windows.Window import BaseWindow
+from windows.ProgressWindow import ProgressWindow
+from windows.Window import BaseWindow
 from uis import settings
 from utils import audio
 from utils.other import *

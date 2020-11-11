@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from Windows.MainWindow import MyMainWindow
+from windows.MainWindow import MyMainWindow
 
 
 # except hook

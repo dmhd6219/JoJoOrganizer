@@ -5,7 +5,7 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtMultimedia import QSound
 
-from Windows.Window import BaseWindow
+from windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
 from utils import audio
