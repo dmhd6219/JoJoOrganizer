@@ -214,3 +214,6 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             cursor = db.cursor()
             self.mainWindow.language = cursor.execute('SELECT language FROM settings').fetchone()[0]
         self.mainWindow.translate(self.mainWindow.language)
+        if getattr(self, "athread", False):
+            self.athread.exit()
+            self.athread.wait()
