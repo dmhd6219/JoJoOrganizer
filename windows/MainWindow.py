@@ -173,11 +173,17 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
         if cell:
             col = cell.column()
 
-            # time
-            if col == 2:
-                try:
+            try:
+                name = self.tableWidget.item(cell.row(), 0).text().strip()
+                if not name:
+                    if self.language == 'rus':
+                        raise EmptyTitle('Введите название')
+                    raise EmptyTitle('Input title')
+
+                # time
+                if col == 2:
                     # получение указанной даты
-                    event_date_list = self.tableWidget.item(cell.row(), 1).text().split('.')
+                    event_date_list = self.tableWidget.item(cell.row(), 1).text().strip().split('.')
                     event_date = dt.date(int(event_date_list[2]), int(event_date_list[1]),
                                          int(event_date_list[0]))
                     # проверка, является ли написанная дата прошедшей
@@ -187,7 +193,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         raise DateError('Written date is less than current')
                     # получение текущего и указанного времени
                     current_time = dt.datetime.now().time()
-                    event_time = str(cell.text()).split(':')
+                    event_time = str(cell.text()).strip().split(':')
                     # проверка, введено ли корректно написанное время
                     try:
                         alarm_time = dt.time(hour=int(event_time[0]), minute=int(event_time[1]))
@@ -207,21 +213,9 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         cursor.execute(
                             f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
 
-                # обработчик ошибок
-                except Exception as ex:
-                    if self.language == 'rus':
-                        QtWidgets.QMessageBox.warning(self, 'Ошибка при изменении', str(ex),
-                                                      QtWidgets.QMessageBox.Ok)
-                    else:
-                        QtWidgets.QMessageBox.warning(self, 'Error with editing', str(ex),
-                                                      QtWidgets.QMessageBox.Ok)
-                    self.tableWidget.currentItem().setText(previous_cell)
-                    self.tableWidget.currentItem().setTextAlignment(QtCore.Qt.AlignCenter)
-                    return
 
-            # date
-            elif col == 1:
-                try:
+                # date
+                elif col == 1:
                     # получение указанной даты
                     event_date_list = self.tableWidget.item(cell.row(), 1).text().split('.')
 
@@ -245,24 +239,24 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         cursor.execute(
                             f'UPDATE events SET date = "{cell.text()}" WHERE number = {cell.row() + 1}')
 
-                    # обработчик ошибок
-                except Exception as ex:
-                    if self.language == 'rus':
-                        QtWidgets.QMessageBox.warning(self, 'Ошибка при изменении', str(ex),
-                                                      QtWidgets.QMessageBox.Ok)
-                    else:
-                        QtWidgets.QMessageBox.warning(self, 'Error with editing', str(ex),
-                                                      QtWidgets.QMessageBox.Ok)
-                    self.tableWidget.currentItem().setText(previous_cell)
-                    self.tableWidget.currentItem().setTextAlignment(QtCore.Qt.AlignCenter)
-                    return
+                # name
+                elif col == 0:
+                    with db:
+                        cursor = db.cursor()
+                        cursor.execute(
+                            f'UPDATE events SET name = "{name}" WHERE number = {cell.row() + 1}')
 
-            # name
-            elif col == 0:
-                with db:
-                    cursor = db.cursor()
-                    cursor.execute(
-                        f'UPDATE events SET name = "{cell.text()}" WHERE number = {cell.row() + 1}')
+                        # обработчик ошибок
+            except Exception as ex:
+                if self.language == 'rus':
+                    QtWidgets.QMessageBox.warning(self, 'Ошибка при изменении', str(ex),
+                                                  QtWidgets.QMessageBox.Ok)
+                else:
+                    QtWidgets.QMessageBox.warning(self, 'Error with editing', str(ex),
+                                                  QtWidgets.QMessageBox.Ok)
+                self.tableWidget.currentItem().setText(previous_cell)
+                self.tableWidget.currentItem().setTextAlignment(QtCore.Qt.AlignCenter)
+                return
 
     # получение сигнала с другого потока
     @QtCore.pyqtSlot(str, str)
@@ -352,7 +346,10 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             if dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) > dt.date.today():
                 events.append(items)
 
-            elif (int(this_time[0]), int(this_time[1])) >= (current_time.hour, current_time.minute) and dt.date(int(this_date[2]), int(this_date[1]), int(this_date[0])) == dt.date.today():
+            elif (int(this_time[0]), int(this_time[1])) >= (
+                    current_time.hour, current_time.minute) and dt.date(int(this_date[2]),
+                                                                        int(this_date[1]), int(
+                    this_date[0])) == dt.date.today():
                 events.append(items)
 
         # сортировка списка с событиями по дате
@@ -369,19 +366,18 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
             cursor.execute('DELETE FROM events')
             for i, column in enumerate(events):
                 cursor.execute('''
-                    INSERT INTO events (
-                        number, 
-                        name, 
-                        date, 
-                        time
-                    ) 
-                    VALUES (
-                        ?, 
-                        ?, 
-                        ?, 
-                        ?
-                    )
-                ''', tuple(column))
+                        INSERT INTO events (
+                            number, 
+                            name, 
+                            date, 
+                            time
+                        ) 
+                        VALUES (
+                            ?, 
+                            ?, 
+                            ?, 
+                            ?
+                        )
+                    ''', tuple(column))
                 for j, elem in enumerate(column[1::]):
                     self.tableWidget.setItem(i, j, QTableWidgetItem(str(elem)))
-

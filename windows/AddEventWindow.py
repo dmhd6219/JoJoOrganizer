@@ -39,7 +39,7 @@ class AddEventWindow(BaseWindow, addevent.Ui_MainWindow):
     # добавление нового значения в таблицу и обновление базы данных
     def additem(self):
         try:
-            name = self.lineEdit.text()
+            name = self.lineEdit.text().strip()
             # проверка, введено ли время
             if not name:
                 if self.mainWindow.language == 'eng':

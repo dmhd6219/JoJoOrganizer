@@ -17,4 +17,3 @@ mainWindow.show()
 sys.excepthook = except_hook
 
 sys.exit(app.exec())
-
