@@ -109,11 +109,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             self.musicopen.setText('Open folder with music')
             self.musicopen.setToolTip('This button opens folder with music')
 
-            self.pushButton.setText('Convert all to wav')
+            self.pushButton.setText('Convert all to mp3')
             self.pushButton.setToolTip('This button will convert all your files from music folder '
-                                       'to wav.\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
+                                       'to mp3.\nYOU WILL LOSE ALL YOUR ORIGINAL FILES!!!')
 
-            self.pushButton_2.setText('Auto-Bassboost')
+            self.pushButton_2.setText('Auto-Bassboost (only mp3)')
             self.pushButton.setToolTip(
                 'This button will bassboost all your tracks from music folder.'
                 '\nYOU WILL LOSE ALL UR ORIGINAL FILES!!!')
@@ -143,11 +143,11 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             self.musicopen.setText('Открыть папку с музыкой')
             self.musicopen.setToolTip('Эта кнопка открывает папку с музыкой')
 
-            self.pushButton.setText('Конвертировать в wav')
+            self.pushButton.setText('Конвертировать в mp3')
             self.pushButton.setToolTip('Эта кнопка сконвертирует все ваши файлы из папки с музыкой '
-                                       'в wav.\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
+                                       'в mp3.\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
 
-            self.pushButton_2.setText('Авто-бассбуст')
+            self.pushButton_2.setText('Авто-бассбуст (только mp3)')
             self.pushButton.setToolTip(
                 'Эта кнопка забассбустит все ваши треки из папки с музыкой.'
                 '\nВЫ ПОТЕРЯЕТЕ ВСЕ ОРИГИНАЛЬНЫЕ ФАЙЛЫ!!!')
@@ -155,16 +155,18 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
             # имя окна
             self.setWindowTitle('Настройки')
 
-    def startTaskNewThread(self):
+    def startAudioProcessor(self):
         self.pwindow.show()
-        if getattr(self, "athread", False):
+        if getattr(self, "athread", False): # если поток уже запущен, то останавливаем
             self.athread.exit()
             self.athread.wait()
 
         self.athread = QtCore.QThread()
-        self.athread.setTerminationEnabled(True)
         self.worker.moveToThread(self.athread)
         self.worker.setProgress.connect(self.pwindow.setProgress)
+        self.worker.errCallback.connect(self.pwindow.errCallback)
+        self.worker.emptyCallback.connect(self.pwindow.emptyCallback)
+        self.worker.AllMP3Callback.connect(self.pwindow.AllMP3Callback)
         self.athread.started.connect(self.worker.run)
         self.athread.start()
     
@@ -187,7 +189,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Adding decibels.."
             self.pwindow = ProgressWindow(self.mainWindow, label)
             self.worker = audio.Bassbooster()
-            self.startTaskNewThread()
+            self.startAudioProcessor()
 
     # конвертация треков в wav
     def convert(self):
@@ -206,7 +208,7 @@ class SettingsWindow(BaseWindow, settings.Ui_MainWindow):
                 label = "Converting.."
             self.pwindow = ProgressWindow(self.mainWindow, label)
             self.worker = audio.Converter()
-            self.startTaskNewThread()
+            self.startAudioProcessor()
 
     # обнеовление языка основного окна при закрытии этого
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:

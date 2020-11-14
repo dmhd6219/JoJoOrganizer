@@ -18,12 +18,12 @@ class FAQWindow(BaseWindow, faq.Ui_MainWindow):
     def translate(self, lang):
         if lang == 'rus':
             self.pushButton.setText(
-                f'Мелодии напоминания в папке /files/music. \nТолько .wav файлы, возможна конвертация в настройках')
+                f'Мелодии напоминания в папке /files/music. \nТолько mp3/wav, возможна конвертация ЛЮБОГО формата в настройках')
             self.pushButton_4.setText('Не удаляйте папки и их содержимое')
             self.pushButton_2.setText('Присутствует ненормативная лексика')
         elif lang == 'eng':
             self.pushButton.setText(
-                f'Alarm music in folder /files/music. \nOnly .wav files, convertation avaliable in settings')
+                f'Alarm music in folder /files/music. \nOnly mp3/wav, convertation from ANY format avaliable in settings')
             self.pushButton_4.setText('Do not delete icons, textures folders and its content.')
             self.pushButton_2.setText('profanity is present')
         self.pushButton_6.setText('Credits:\nSvyatoslav Svyatkin\nImran Amirov')

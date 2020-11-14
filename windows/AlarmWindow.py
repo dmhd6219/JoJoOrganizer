@@ -2,8 +2,8 @@ import os
 import random
 
 from PyQt5 import QtGui, QtWidgets
-from PyQt5.QtCore import Qt, QTimer
-from PyQt5.QtMultimedia import QSound
+from PyQt5.QtCore import Qt, QTimer, QUrl
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from windows.Window import BaseWindow
 from opengl import gl
@@ -28,12 +28,13 @@ class AlarmWindow(BaseWindow, alarm.Ui_MainWindow):
         self.openGLWidget = gl.OpenGLWidget(self, 500, 500)
 
         # сортировка файлов с музыкой
-        files = list(filter(lambda x: x.endswith('.wav'), os.listdir(musicdir)))
+        files = os.listdir(musicdir)
         # проигрывание музыки
         if files:
             ya = musicdir + "/" + random.choice(files)
-            self.sound = QSound(ya)
-            self.sound.play()
+            self.player = QMediaPlayer(self)
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(ya)))
+            self.player.play()
         
         # определение границ дисплея и настройка скорости тряски окна
         size = QtWidgets.QApplication.instance().primaryScreen().size()
@@ -65,5 +66,5 @@ class AlarmWindow(BaseWindow, alarm.Ui_MainWindow):
         self.move(x + deltax, y + deltay)
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
-        if getattr(self, "sound", False):
-            self.sound.stop()
+        if getattr(self, "player", False):
+            self.player.stop()

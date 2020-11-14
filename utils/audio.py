@@ -11,6 +11,7 @@ from pydub import AudioSegment
 import numpy as np
 from utils.other import musicdir
 
+
 attenuate_db = 0
 accentuate_db = 22
 
@@ -29,38 +30,59 @@ def bass_line_freq(track):
     return bass_factor
 
 
-class Bassbooster(QtCore.QObject):
+class BaseAudioProcessor(QtCore.QObject):
     setProgress = QtCore.pyqtSignal(int)
-
+    errCallback = QtCore.pyqtSignal(str, Exception)
+    emptyCallback = QtCore.pyqtSignal()
+    AllMP3Callback = QtCore.pyqtSignal()
+    
     def run(self):
-        list = listdir(musicdir)
-        if list:
-            for filename in list:
-                sample = AudioSegment.from_wav(musicdir + "/" + filename)
-                filtered = sample.low_pass_filter(bass_line_freq(sample.get_array_of_samples()))
+        dir = listdir(musicdir)
+        if dir:
+            try:
+                self.process(dir)
+            except IndexError:
+                self.errCallback.emit(self.filename, Exception("Unsupported file format"))
+            except PermissionError:
+                self.errCallback.emit(self.filename, Exception("Cannot save, is file open in other program?"))
+            except Exception as ex:
+                self.errCallback.emit(self.filename, ex)    
+        else:
+            self.emptyCallback.emit()
+
+
+class Converter(BaseAudioProcessor):
+    
+    def process(self, dir):
+        if not list(filter(lambda x: not x.endswith("mp3"), dir)):
+            self.AllMP3Callback.emit()
+            return
         
-                combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
-                combined.export(musicdir + '/' + filename, format="wav")
-                progress = (list.index(filename) + 1) / len(list) * 100
-                self.setProgress.emit(progress)
-        else:
-            self.setProgress.emit(100)
-
-
-class Converter(QtCore.QObject):
-    setProgress = QtCore.pyqtSignal(int)
-
-    def run(self):
-        list = listdir(musicdir)
-        if list:
-            for filename in list:
-                if not filename.endswith("wav"):            
-                    mp3 = AudioSegment.from_mp3(musicdir + "/" + filename)
+        for filename in dir:
+            self.filename = filename
+            if not filename.endswith("mp3"):            
+                mp3 = AudioSegment.from_file(musicdir + "/" + filename)
+        
+                remove(musicdir + '/' + filename)
+                mp3.export(musicdir + '/' + "".join(filename.split(".")[:-1]) + ".mp3", format="mp3")
             
-                    remove(musicdir + '/' + filename)
-                    mp3.export(musicdir + '/' + filename.replace(".mp3", ".wav"), format="wav")
-                
-                progress = (list.index(filename) + 1) / len(list) * 100
-                self.setProgress.emit(progress)
-        else:
-            self.setProgress.emit(100)
+            progress = (dir.index(filename) + 1) / len(dir) * 100
+            self.setProgress.emit(progress)
+
+
+class Bassbooster(BaseAudioProcessor):
+    
+    def process(self, dir):
+        for filename in dir:
+            self.filename = filename
+            if not filename.endswith("mp3"):
+                raise IndexError()
+                 
+            sample = AudioSegment.from_mp3(musicdir + "/" + filename)
+            filtered = sample.low_pass_filter(bass_line_freq(sample.get_array_of_samples()))
+    
+            combined = (sample - attenuate_db).overlay(filtered + accentuate_db)
+            combined.export(musicdir + '/' + filename, format="mp3")
+            progress = (dir.index(filename) + 1) / len(dir) * 100
+            self.setProgress.emit(progress)
+
