@@ -1,4 +1,3 @@
-from PyQt5 import QtCore
 from PyQt5.Qt import QDialog, Qt
 from PyQt5.QtGui import QIcon
 
@@ -14,8 +13,7 @@ class ProgressWindow(QDialog, progress.Ui_Dialog):
         self.setupUi(self)
         self.label.setText(label)
         self.translate(mainWindow.language)
-        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint);
-
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
 
     # функция перевода
     def translate(self, lang):

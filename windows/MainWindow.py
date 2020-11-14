@@ -1,6 +1,4 @@
-import sqlite3
-
-from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMessageBox, QTableWidgetItem
 
@@ -9,7 +7,7 @@ from windows.AlarmWindow import AlarmWindow
 from windows.FAQWindow import FAQWindow
 from windows.SettingsWindow import SettingsWindow
 from windows.Window import BaseWindow
-import datetime as dt
+
 from uis import design
 from utils.errors import *
 from utils.other import *
@@ -33,70 +31,6 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
 
         self.file = file
 
-        self.faqbutton.setStyleSheet("""
-            QPushButton {
-                image: url(iconsdir/faq.png);
-                background-repeat: no-repeat;
-                width: 50px;
-                height: 50px;
-            }
-            
-            QPushButton:hover {
-                image: url(iconsdir/faq1.png);
-                background-repeat: no-repeat;
-                width: 50px;
-                height: 50px;
-            }
-        """.replace("iconsdir", iconsdir))
-
-        self.settingsButton.setStyleSheet("""
-                    QPushButton {
-                        image: url(iconsdir/settings.png);
-                        background-repeat: no-repeat;
-                        width: 50px;
-                        height: 50px;
-                    }
-
-                    QPushButton:hover {
-                        image: url(iconsdir/settings1.png);
-                        background-repeat: no-repeat;
-                        width: 50px;
-                        height: 50px;
-                    }
-                """.replace("iconsdir", iconsdir))
-        self.settingsButton.setText('')
-
-        self.deleteEvent.setStyleSheet("""
-                            QPushButton {
-                                image: url(iconsdir/delete.png);
-                                background-repeat: no-repeat;
-                                width: 50px;
-                                height: 50px;
-                            }
-
-                            QPushButton:hover {
-                                image: url(iconsdir/delete1.png);
-                                background-repeat: no-repeat;
-                                width: 50px;
-                                height: 50px;
-                            }
-                        """.replace("iconsdir", iconsdir))
-
-        self.addEvent.setStyleSheet("""
-                                    QPushButton {
-                                        image: url(iconsdir/add.png);
-                                        background-repeat: no-repeat;
-                                        width: 50px;
-                                        height: 50px;
-                                    }
-
-                                    QPushButton:hover {
-                                        image: url(iconsdir/add1.png);
-                                        background-repeat: no-repeat;
-                                        width: 50px;
-                                        height: 50px;
-                                    }
-                                """.replace("iconsdir", iconsdir))
 
         with db:  # загрузка данных из бд при запуске программы
             cursor = db.cursor()
@@ -213,7 +147,6 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         cursor.execute(
                             f'UPDATE events SET time = "{cell.text()}" WHERE number = {cell.row() + 1}')
 
-
                 # date
                 elif col == 1:
                     # получение указанной даты
@@ -246,7 +179,7 @@ class MyMainWindow(BaseWindow, design.Ui_mainWindow):
                         cursor.execute(
                             f'UPDATE events SET name = "{name}" WHERE number = {cell.row() + 1}')
 
-                        # обработчик ошибок
+            # обработчик ошибок
             except Exception as ex:
                 if self.language == 'rus':
                     QtWidgets.QMessageBox.warning(self, 'Ошибка при изменении', str(ex),

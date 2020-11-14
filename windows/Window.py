@@ -2,7 +2,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow
 
-from utils.other import iconsdir, resourcePath
+from utils.other import iconsdir
 
 
 # базовый класс для окон с крутым названием

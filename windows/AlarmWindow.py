@@ -1,4 +1,3 @@
-import os
 import random
 
 from PyQt5 import QtGui, QtWidgets
@@ -8,7 +7,6 @@ from PyQt5.QtMultimedia import QSound
 from windows.Window import BaseWindow
 from opengl import gl
 from uis import alarm
-from utils import audio
 from utils.other import *
 
 

@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from utils.other import iconsdir
 
 
 class Ui_mainWindow(object):
@@ -17,47 +18,47 @@ class Ui_mainWindow(object):
         mainWindow.resize(404, 320)
         mainWindow.setMinimumSize(QtCore.QSize(0, 0))
         mainWindow.setStyleSheet("QWidget{\n"
-"    background-color:rgb(34, 34, 34);\n"
-"    color:white;\n"
-"}\n"
-"\n"
-"QPushButton{\n"
-"background-color: rgb(83, 83, 83);\n"
-"border-radius: 6.5px;\n"
-"color:black;\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"background-color:rgb(52, 52, 52)\n"
-"}\n"
-"\n"
-"QTableWidget\n"
-"{\n"
-"background-color:rgb(255, 242, 189);\n"
-"border-radius: 3px;\n"
-"color:black;\n"
-"}\n"
-"\n"
-"QTableWidget QTableCornerButton::section\n"
-"{\n"
-"background-color:rgb(255, 242, 189);\n"
-"border: 1px outset red;\n"
-"}\n"
-"\n"
-"QHeaderView\n"
-"{\n"
-"background-color:  rgb(83, 83, 83);\n"
-"}\n"
-"\n"
-"QHeaderView::section\n"
-"{\n"
-"background-color:  rgb(83, 83, 83);\n"
-"color:rgb(255, 242, 189);\n"
-"border:1px outset rgb(181, 172, 37);\n"
-"border-radius: 3px;\n"
-"}\n"
-"\n"
-"")
+                                 "    background-color:rgb(34, 34, 34);\n"
+                                 "    color:white;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton{\n"
+                                 "background-color: rgb(83, 83, 83);\n"
+                                 "border-radius: 6.5px;\n"
+                                 "color:black;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:hover{\n"
+                                 "background-color:rgb(52, 52, 52)\n"
+                                 "}\n"
+                                 "\n"
+                                 "QTableWidget\n"
+                                 "{\n"
+                                 "background-color:rgb(255, 242, 189);\n"
+                                 "border-radius: 3px;\n"
+                                 "color:black;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QTableWidget QTableCornerButton::section\n"
+                                 "{\n"
+                                 "background-color:rgb(255, 242, 189);\n"
+                                 "border: 1px outset red;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QHeaderView\n"
+                                 "{\n"
+                                 "background-color:  rgb(83, 83, 83);\n"
+                                 "}\n"
+                                 "\n"
+                                 "QHeaderView::section\n"
+                                 "{\n"
+                                 "background-color:  rgb(83, 83, 83);\n"
+                                 "color:rgb(255, 242, 189);\n"
+                                 "border:1px outset rgb(181, 172, 37);\n"
+                                 "border-radius: 3px;\n"
+                                 "}\n"
+                                 "\n"
+                                 "")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -94,18 +95,18 @@ class Ui_mainWindow(object):
         self.faqbutton = QtWidgets.QPushButton(self.centralwidget)
         self.faqbutton.setMinimumSize(QtCore.QSize(60, 60))
         self.faqbutton.setStyleSheet("QPushButton {\n"
-"background-repeat: no-repeat;\n"
-"width: 50px;\n"
-"    height: 50px;\n"
-"\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"background-repeat: no-repeat;\n"
-"width: 50px;\n"
-"    height: 50px;\n"
-"\n"
-"}")
+                                     "background-repeat: no-repeat;\n"
+                                     "width: 50px;\n"
+                                     "    height: 50px;\n"
+                                     "\n"
+                                     "}\n"
+                                     "\n"
+                                     "QPushButton:hover {\n"
+                                     "background-repeat: no-repeat;\n"
+                                     "width: 50px;\n"
+                                     "    height: 50px;\n"
+                                     "\n"
+                                     "}")
         self.faqbutton.setText("")
         self.faqbutton.setIconSize(QtCore.QSize(50, 50))
         self.faqbutton.setObjectName("faqbutton")
@@ -119,6 +120,71 @@ class Ui_mainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
         self.statusbar.setObjectName("statusbar")
         mainWindow.setStatusBar(self.statusbar)
+
+        self.faqbutton.setStyleSheet("""
+                    QPushButton {
+                        image: url(iconsdir/faq.png);
+                        background-repeat: no-repeat;
+                        width: 50px;
+                        height: 50px;
+                    }
+
+                    QPushButton:hover {
+                        image: url(iconsdir/faq1.png);
+                        background-repeat: no-repeat;
+                        width: 50px;
+                        height: 50px;
+                    }
+                """.replace("iconsdir", iconsdir))
+
+        self.settingsButton.setStyleSheet("""
+                            QPushButton {
+                                image: url(iconsdir/settings.png);
+                                background-repeat: no-repeat;
+                                width: 50px;
+                                height: 50px;
+                            }
+
+                            QPushButton:hover {
+                                image: url(iconsdir/settings1.png);
+                                background-repeat: no-repeat;
+                                width: 50px;
+                                height: 50px;
+                            }
+                        """.replace("iconsdir", iconsdir))
+        self.settingsButton.setText('')
+
+        self.deleteEvent.setStyleSheet("""
+                                    QPushButton {
+                                        image: url(iconsdir/delete.png);
+                                        background-repeat: no-repeat;
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+
+                                    QPushButton:hover {
+                                        image: url(iconsdir/delete1.png);
+                                        background-repeat: no-repeat;
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+                                """.replace("iconsdir", iconsdir))
+
+        self.addEvent.setStyleSheet("""
+                                            QPushButton {
+                                                image: url(iconsdir/add.png);
+                                                background-repeat: no-repeat;
+                                                width: 50px;
+                                                height: 50px;
+                                            }
+
+                                            QPushButton:hover {
+                                                image: url(iconsdir/add1.png);
+                                                background-repeat: no-repeat;
+                                                width: 50px;
+                                                height: 50px;
+                                            }
+                                        """.replace("iconsdir", iconsdir))
 
         self.retranslateUi(mainWindow)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
