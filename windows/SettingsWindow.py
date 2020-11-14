@@ -1,8 +1,5 @@
-import os
-import sys
-
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import QMessageBox
 
 from windows.ProgressWindow import ProgressWindow
 from windows.Window import BaseWindow
