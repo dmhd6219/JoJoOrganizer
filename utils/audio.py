@@ -7,6 +7,7 @@ from os import listdir, remove
 
 from PyQt5 import QtCore
 from pydub import AudioSegment
+from pydub.exceptions import CouldntDecodeError
 
 import numpy as np
 from utils.other import musicdir
@@ -43,10 +44,13 @@ class BaseAudioProcessor(QtCore.QObject):
                 self.process(dir)
             except IndexError:
                 self.errCallback.emit(self.filename, Exception("Unsupported file format"))
+            except CouldntDecodeError:
+                self.errCallback.emit(self.filename, Exception("Invalid file"))
             except PermissionError:
                 self.errCallback.emit(self.filename, Exception("Cannot save, is file open in other program?"))
             except Exception as ex:
-                self.errCallback.emit(self.filename, ex)    
+                self.errCallback.emit(self.filename, ex)
+                raise ex
         else:
             self.emptyCallback.emit()
 
