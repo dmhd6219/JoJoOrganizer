@@ -10,7 +10,7 @@ from opengl.gl import OpenGLWidget
 class GLTestWindow(BaseWindow):  # тестовое окно для отладки OpenGL
     
     def __init__(self):
-        super().__init__()
+        super().__init__(self)
         width = 800
         height = 600
         self.setFixedSize(width, height)
