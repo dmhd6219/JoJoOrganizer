@@ -4,6 +4,8 @@
 [![Python](https://img.shields.io/badge/python-blue.svg)](https://www.python.org/)
 [![PyQt5](https://img.shields.io/badge/PyQt5-blue.svg)](https://www.riverbankcomputing.com/software/pyqt/intro)
 
+Made as PyQt5 project at Yandex Lyceum.
+
 ## Overview
 
 JoJo Organizer is a unique and unconventional desktop alarm application 
