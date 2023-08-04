@@ -27,7 +27,7 @@ a moving window that prevents the app from being easily closed, bass-boosted mus
 
 - **Dark Mode:** The app offers a dark mode for users who prefer a darker color scheme.
 
-## Installation
+## Usage
 
 ### Using Python
 1. Clone this repository to your local machine.
